@@ -1,0 +1,94 @@
+﻿<Window x:Class="Lightsaber_Builder_Game.Presentation.GameSetupView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Lightsaber_Builder_Game.Presentation"
+      mc:Ignorable="d" 
+      Height="450" 
+      Width="400"
+      Title="Create Player"
+      Background="Black">
+
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Lightsaber_Builder_Game;component/Graphics/296728.png"/>
+        </Grid.Background>
+        <StackPanel
+            Orientation="Vertical"
+            HorizontalAlignment="Center">
+            <Label
+                Content="Star Wars"
+                Foreground="Yellow"
+                FontSize="50"
+                FontFamily="Rod"
+                VerticalContentAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Margin="0,10,0,0"/>
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Right">
+                <Label 
+                    Content="Name" 
+                    Foreground="Yellow" 
+                    FontSize="20"/>
+                <TextBox 
+                    Name="NameTextBox" 
+                    Background="White" 
+                    Width="120"
+                    Margin="5"
+                    FontSize="20"/>
+            </StackPanel>
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Right">
+                <Label 
+                    Content="Age" 
+                    Foreground="Yellow" 
+                    FontSize="20"/>
+                <TextBox 
+                    Name="AgeTextBox" 
+                    Background="White" 
+                    Width="120"
+                    Margin="5"
+                    FontSize="20"/>
+            </StackPanel>
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Right">
+                <Label 
+                    Content="Species" 
+                    Foreground="Yellow" 
+                    FontSize="20"/>
+                <ComboBox
+                    Name="RaceComboBoxButton" 
+                    Width="120"
+                    FontSize="20"
+                    Margin="5"/>
+            </StackPanel>
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Center"
+                Margin="0,30,0,0">
+                <Label 
+                    Content="Side of the Force" 
+                    Foreground="Yellow" FontSize="20" 
+                    VerticalContentAlignment="Center"/>
+            </StackPanel>
+            <ComboBox
+                Name="ForceSideComboBox"
+                HorizontalAlignment="Center"
+                Width="150"
+                Height="30"
+                FontSize="20"/>
+            <Button 
+                Name="DoneButton"
+                Content="Done"
+                Margin="20" Click="DoneButton_Click"/>
+            <TextBlock
+                Name="ErrorTextBlock"
+                Foreground="Red"
+                FontWeight="Bold"/>
+        </StackPanel>
+    </Grid>
+</Window>

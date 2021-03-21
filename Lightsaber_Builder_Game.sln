@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lightsaber_Builder_Game", "Lightsaber_Builder_Game\Lightsaber_Builder_Game.csproj", "{6B06D1A4-BB8D-4AB4-954B-23C829FFD68B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B06D1A4-BB8D-4AB4-954B-23C829FFD68B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B06D1A4-BB8D-4AB4-954B-23C829FFD68B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B06D1A4-BB8D-4AB4-954B-23C829FFD68B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B06D1A4-BB8D-4AB4-954B-23C829FFD68B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8EFFAFC2-E28E-40E6-BB32-B26EFB80E1B2}
+	EndGlobalSection
+EndGlobal
