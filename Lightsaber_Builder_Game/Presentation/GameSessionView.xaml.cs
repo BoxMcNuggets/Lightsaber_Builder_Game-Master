@@ -35,9 +35,28 @@ namespace Lightsaber_Builder_Game.Presentation
             this.Title = "Non Official Lucasfilms Game";
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void PickUpButton_Click(object sender, RoutedEventArgs e)
         {
+            if (LocationItemsDataGrid.SelectedItem != null)
+            {
+                _gameSessionViewModel.AddItemToInventory();
+            }
+        }
 
+        private void DropButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (InventoryItemsDataGrid.SelectedItem != null)
+            {
+                _gameSessionViewModel.RemoveItemFromInventory();
+            }
+        }
+
+        private void UseButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (InventoryItemsDataGrid.SelectedItem != null)
+            {
+                //_gameSessionViewModel.OnUseGameItem();
+            }
         }
     }
 }

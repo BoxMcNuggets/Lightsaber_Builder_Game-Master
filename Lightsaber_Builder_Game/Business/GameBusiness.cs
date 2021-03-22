@@ -11,11 +11,11 @@ namespace Lightsaber_Builder_Game.Business
 {
     public class GameBusiness
     {
-        bool _newPlayer = false;
+        bool _newPlayer = true;
 
         GameSessionViewModel _gameSessionViewModel;
         Player _player = new Player();
-        GameSetupView _playerSetupView;
+        GameSetupView _playerSetupView = null;
         Map _gamemap;
 
         public GameBusiness()

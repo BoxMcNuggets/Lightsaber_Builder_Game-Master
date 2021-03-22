@@ -28,7 +28,8 @@ namespace Lightsaber_Builder_Game.Presentation
         private Location _currentLocation;
         private ObservableCollection<Location> _accessibleLocations;
         private string _currentLocationName;
-        private GameItemModel _currentGameItemModel;
+        private GameItemModel _currentGameItem;
+        private string _currentLocationInformation;
         #endregion
 
         #region PROPERTIES
@@ -43,6 +44,10 @@ namespace Lightsaber_Builder_Game.Presentation
         {
             get { return _currentLocation.Message; }
         }
+        public string PlanetLog
+        {
+            get { return _currentLocation.PlanetLog; }
+        }
         public Map GameMap
         {
             get { return _gamemap; }
@@ -54,6 +59,7 @@ namespace Lightsaber_Builder_Game.Presentation
             set
             {
                 _currentLocation = value;
+                _currentLocationInformation = _currentLocation.Description;
                 OnPropertyChanged(nameof(CurrentLocation));
             }
         }
@@ -91,12 +97,20 @@ namespace Lightsaber_Builder_Game.Presentation
                 OnPropertyChanged(nameof(MissionTimeDisplay));
             }
         }
-
-
-        public GameItemModel CurrentGameItemModel
+        public string CurrentLocationInformation
         {
-            get { return _currentGameItemModel; }
-            set { _currentGameItemModel = value; }
+            get { return _currentLocationInformation; }
+            set
+            {
+                _currentLocationInformation = value;
+                OnPropertyChanged(nameof(CurrentLocationInformation));
+            }
+        }
+
+        public GameItemModel CurrentGameItem
+        {
+            get { return _currentGameItem; }
+            set { _currentGameItem = value; }
         }
 
         #endregion
@@ -124,6 +138,50 @@ namespace Lightsaber_Builder_Game.Presentation
         #endregion
 
         #region METHODS
+        private void InitializeView()
+        {
+            _gameStartTime = DateTime.Now;
+            UpdateAccessibleLocations();
+            _currentLocationInformation = CurrentLocation.Description;
+            _player.UpdateInventoryCategories();
+        }
+
+        #region ACTION METHODS
+        public void AddItemToInventory()
+        {
+            //
+            // confirm a game item selected and is in current location
+            // subtract from location and add to inventory
+            //
+            if (_currentGameItem != null && _currentLocation.GameItems.Contains(_currentGameItem))
+            {
+                //
+                // cast selected game item 
+                //
+                GameItemModel selectedGameItem = _currentGameItem as GameItemModel;
+
+                _currentLocation.RemoveGameItemModelFromLocation(selectedGameItem);
+                _player.AddGameItemToInventory(selectedGameItem);
+            }
+        }
+        public void RemoveItemFromInventory()
+        {
+            //
+            // confirm a game item selected
+            // subtract from inventory and add to location
+            //
+            if (_currentGameItem != null)
+            {
+                //
+                // cast selected game item 
+                //
+                GameItemModel selectedGameItem = _currentGameItem as GameItemModel;
+
+                _currentLocation.AddGameItemModelToLocation(selectedGameItem);
+                _player.RemoveGameItemFromInventory(selectedGameItem);
+            }
+        }
+        #endregion
         private void OnPlayerMove()
         {
             //
@@ -138,6 +196,7 @@ namespace Lightsaber_Builder_Game.Presentation
             }
             //_currentLocation = AccessibleLocations.FirstOrDefault(l => l.Name == _currentLocationName);
             OnPropertyChanged(nameof(MessageDisplay));
+            OnPropertyChanged(nameof(PlanetLog));
             //
             // update the list of locations
             //
@@ -173,12 +232,7 @@ namespace Lightsaber_Builder_Game.Presentation
             OnPropertyChanged(nameof(AccessibleLocations));
         }
 
-        private void InitializeView()
-        {
-            _gameStartTime = DateTime.Now;
 
-            UpdateAccessibleLocations();
-        }
 
         private TimeSpan GameTime()
         {

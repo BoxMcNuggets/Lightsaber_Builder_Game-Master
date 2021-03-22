@@ -21,11 +21,11 @@ namespace Lightsaber_Builder_Game.Models
         private int _health;
         private ForceSide _forceSide;
         private List<Location> _locationsVisited;
-        private ObservableCollection<GameItemModel> _inventory;
+        private ObservableCollection<GameItemModel> _inventory = new ObservableCollection<GameItemModel>();
         private ObservableCollection<GameItemModel> _healthItems;
         private ObservableCollection<GameItemModel> _credits;
         private ObservableCollection<GameItemModel> _weapons;
-        private ObservableCollection<GameItemModel> _relics;
+        private ObservableCollection<GameItemModel> _lightSaberParts;
 
         #endregion
 
@@ -57,6 +57,16 @@ namespace Lightsaber_Builder_Game.Models
             set 
             {
                 _health = value;
+
+                if (_health > 100)
+                {
+                    _health = 100;
+                }
+                else if (_health <= 0)
+                {
+                    _health = 100;
+                    _lives--;
+                }
                 OnPropertyChanged(nameof(Health));
             }
         }
@@ -90,6 +100,11 @@ namespace Lightsaber_Builder_Game.Models
             get { return _credits; }
             set { _credits = value; }
         }
+        public ObservableCollection<GameItemModel> LightSaberParts
+        {
+            get { return _lightSaberParts; }
+            set { _lightSaberParts = value; }
+        }
         #endregion
 
         #region CONSTRUCTORS
@@ -98,11 +113,42 @@ namespace Lightsaber_Builder_Game.Models
             _locationsVisited = new List<Location>();
             _weapons = new ObservableCollection<GameItemModel>();
             _healthItems = new ObservableCollection<GameItemModel>();
+            _credits = new ObservableCollection<GameItemModel>();
+            _lightSaberParts = new ObservableCollection<GameItemModel>();
         }
 
         #endregion
 
         #region METHODS
+        public void UpdateInventoryCategories()
+        {
+            HealthItems.Clear();
+            Weapons.Clear();
+            Credits.Clear();
+            LightSaberParts.Clear();
+
+            foreach (var gameItem in _inventory)
+            {
+                if (gameItem is HealthItems) HealthItems.Add(gameItem);
+                if (gameItem is Weapons) Weapons.Add(gameItem);
+                if (gameItem is Credits) Credits.Add(gameItem);
+                if (gameItem is LightSaberParts) LightSaberParts.Add(gameItem);
+            }
+        }
+        public void AddGameItemToInventory(GameItemModel selectedGameItem)
+        {
+            if (selectedGameItem != null)
+            {
+                _inventory.Add(selectedGameItem);
+            }
+        }
+        public void RemoveGameItemFromInventory(GameItemModel selectedGameItem)
+        {
+            if (selectedGameItem != null)
+            {
+                _inventory.Remove(selectedGameItem);
+            }
+        }
         public override string DefaultGreeting()
         {
             string article = "a";

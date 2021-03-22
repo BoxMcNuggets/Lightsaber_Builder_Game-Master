@@ -102,8 +102,9 @@
                         Style="{StaticResource GameSessionLabelStyle}"/>
                     <DataGrid
                         x:Name="InventoryItemsDataGrid"
+                        FontSize="20"
                         Height="225"
-                        ItemsSource="{Binding CurrentLocation.Inventory}" 
+                        ItemsSource="{Binding Player.Inventory}" 
                         SelectedItem="{Binding CurrentGameItem}"
                         AutoGenerateColumns="False"
                         HeadersVisibility="Column">
@@ -120,6 +121,25 @@
                                 Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <StackPanel
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                        <Button
+                            Content="Use"
+                            FontSize="20"
+                            Height="50"
+                            Width="150"
+                            Margin="2"
+                            Click="UseButton_Click"/>
+                        <Button
+                            Content="Drop"
+                            FontSize="20"
+                            Height="50"
+                            Width="150"
+                            Margin="2"
+                            Click="DropButton_Click"/>
+                    </StackPanel>
+
                 </StackPanel>
             </Border>
         </Grid>
@@ -137,7 +157,7 @@
                 <StackPanel>
                     <TextBox
                         Name="PlanetInfoTextBox"
-                        Height="150"
+                        Height="100"
                         Width="auto"
                         Margin="10"
                         FontSize="20"
@@ -149,7 +169,7 @@
                         VerticalContentAlignment="top"/>
                     <TextBox
                         Name="MainLogTextBox"
-                        Height="150"
+                        Height="200"
                         Width="auto"
                         Margin="10"
                         FontSize="20"
@@ -161,6 +181,7 @@
                         VerticalContentAlignment="top"/>
                     <DataGrid
                         x:Name="LocationItemsDataGrid"
+                        FontSize="20"
                         Height="125"
                         ItemsSource="{Binding CurrentLocation.GameItems}" 
                         SelectedItem="{Binding CurrentGameItem}"
@@ -187,7 +208,9 @@
                             Content="Pick Up"
                             Height="50"
                             Width="200"
-                            Margin="2" Click="Button_Click"/>
+                            Margin="2" 
+                            FontSize="20"
+                            Click="PickUpButton_Click"/>
                     </StackPanel>
 
                 </StackPanel>
