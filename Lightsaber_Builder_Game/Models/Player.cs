@@ -17,8 +17,10 @@ namespace Lightsaber_Builder_Game.Models
 
         #region FIELDS
 
+        private int _lightsaberProgress;
         private int _lives;
         private int _health;
+        private string _weaponsInUse;
         private ForceSide _forceSide;
         private List<Location> _locationsVisited;
         private ObservableCollection<GameItemModel> _inventory = new ObservableCollection<GameItemModel>();
@@ -30,6 +32,27 @@ namespace Lightsaber_Builder_Game.Models
         #endregion
 
         #region PROPERTIES
+
+
+
+        public int LightsaberProgress
+        {
+            get { return _lightsaberProgress; }
+            set 
+            {
+                _lightsaberProgress = value;
+                OnPropertyChanged(nameof(LightsaberProgress));
+            }
+        }
+        public string WeaponsInUse
+        {
+            get { return _weaponsInUse; }
+            set 
+            {
+                _weaponsInUse = value;
+                OnPropertyChanged(nameof(WeaponsInUse));
+            }
+        }
 
         public int Lives
         {

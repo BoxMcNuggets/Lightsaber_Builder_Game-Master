@@ -1,0 +1,130 @@
+﻿<Window x:Class="Lightsaber_Builder_Game.Presentation.TradeSession"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Lightsaber_Builder_Game.Presentation"
+      mc:Ignorable="d" 
+      Height="600" 
+      Width="700"
+      Title="TradeSession"
+      Background="Gray">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+        <Style 
+            x:Key="GameSessionLabelStyle"
+            TargetType="Label">
+            <Setter Property="Foreground" Value="Yellow"/>
+            <Setter Property="FontFamily" Value="Arial Black"/>
+            <Setter Property="FontSize" Value="25"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="BorderStyle" TargetType="Border">
+            <Setter Property="BorderBrush" Value="Yellow"/>
+            <Setter Property="BorderThickness" Value="4"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <Style
+            x:Key="ButtonGameSessionStyle"
+            TargetType="Button">
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Border
+            Grid.Column="0"
+            Grid.Row="0"
+            Background="Gray"
+            Height="Auto"
+            Style="{StaticResource BorderStyle}">
+            <StackPanel>
+                <Label
+                        Content="Player Inventory"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Center"
+                        Style="{StaticResource GameSessionLabelStyle}"/>
+                <DataGrid
+                        x:Name="InventoryItemsDataGrid"
+                        FontSize="20"
+                        Height="500"
+                        ItemsSource="{Binding Player.Inventory}" 
+                        SelectedItem="{Binding CurrentGameItem}"
+                        AutoGenerateColumns="False"
+                        HeadersVisibility="Column"/>
+                <!--<DataGrid.Columns>
+                    <DataGridTextColumn 
+                                Header="Name"
+                                FontSize="20"
+                                Binding="{Binding Name, Mode=OneWay}"
+                                Width="4*"/>
+                    <DataGridTextColumn 
+                                Header="Value"
+                                FontSize="20"
+                                Binding="{Binding Value, Mode=OneWay}"
+                                Width="*"/>
+                </DataGrid.Columns>-->
+            </StackPanel>
+        </Border>
+        <StackPanel
+            Grid.Column="1"
+            VerticalAlignment="Center">
+            <Button
+                Content="Trade"
+                Margin="2"
+                Style="{StaticResource ButtonGameSessionStyle}"/>
+            <TextBox
+                Name="TradeLog"
+                Height="200"
+                Width="Auto"
+                Margin="2"
+                Background="LightGray"
+                TextWrapping="Wrap"
+                Text="{Binding MessageDisplay, Mode=OneWay}"
+                VerticalScrollBarVisibility="Auto"
+                VerticalContentAlignment="top"/>
+        </StackPanel>
+        <Border
+            Grid.Column="2"
+            Grid.Row="0"
+            Background="Gray"
+            Height="Auto"
+            Style="{StaticResource BorderStyle}">
+            <StackPanel>
+                <Label
+                        Content="NPC Inventory"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Center"
+                        Style="{StaticResource GameSessionLabelStyle}"/>
+                <DataGrid
+                        x:Name="NPCInventoryItemsDataGrid"
+                        FontSize="20"
+                        Height="500"
+                        ItemsSource="{Binding Player.Inventory}" 
+                        SelectedItem="{Binding CurrentGameItem}"
+                        AutoGenerateColumns="False"
+                        HeadersVisibility="Column"/>
+                <!--<DataGrid.Columns>
+                    <DataGridTextColumn 
+                                Header="Name"
+                                FontSize="20"
+                                Binding="{Binding Name, Mode=OneWay}"
+                                Width="4*"/>
+                    <DataGridTextColumn 
+                                Header="Value"
+                                FontSize="20"
+                                Binding="{Binding Value, Mode=OneWay}"
+                                Width="*"/>
+                </DataGrid.Columns>-->
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

@@ -31,7 +31,7 @@ namespace Lightsaber_Builder_Game.Business
                 _playerSetupView = new GameSetupView(_player);
                 _playerSetupView.ShowDialog();
 
-                _player.Health = 100;
+                _player.Health = 70;
                 _player.Lives = 3;
             }
             else
@@ -45,9 +45,6 @@ namespace Lightsaber_Builder_Game.Business
         }
         private void InstantiateAndShowView()
         {
-            //
-            // instantiate the view model and initialize the data set
-            //
             _gameSessionViewModel = new GameSessionViewModel(_player, _gamemap);
             GameSessionView gameSessionView = new GameSessionView(_gameSessionViewModel);
 

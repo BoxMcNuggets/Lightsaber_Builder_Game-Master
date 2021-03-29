@@ -55,8 +55,13 @@ namespace Lightsaber_Builder_Game.Presentation
         {
             if (InventoryItemsDataGrid.SelectedItem != null)
             {
-                //_gameSessionViewModel.OnUseGameItem();
+                _gameSessionViewModel.OnUseGameItem();
             }
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

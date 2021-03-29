@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lightsaber_Builder_Game.Models
 {
-    public class GameItemModel
+    public class GameItemModel : ObservableObject
     {
         public int Id { get; set; }
         public string Name { get; set; }

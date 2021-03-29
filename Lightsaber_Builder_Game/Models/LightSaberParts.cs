@@ -14,15 +14,17 @@ namespace Lightsaber_Builder_Game.Models
             MainHilt,
             Controls,
             HandGrip,
-            EnergyCore
+            EnergyCore,
         }
 
         public LightsaberPart Type { get; set; }
+        public int LightsaberProgress { get; set; }
 
-        public LightSaberParts(int id, string name, int value, LightsaberPart type, string description)
+        public LightSaberParts(int id, string name, int value, LightsaberPart type, string description, int LightsaberProg)
     : base(id, name, value, description)
         {
             Type = type;
+            LightsaberProgress = LightsaberProg;
         }
 
         public override string InformationString()

@@ -149,44 +149,54 @@ namespace Lightsaber_Builder_Game.Presentation
         #region ACTION METHODS
         public void AddItemToInventory()
         {
-            //
-            // confirm a game item selected and is in current location
-            // subtract from location and add to inventory
-            //
+
             if (_currentGameItem != null && _currentLocation.GameItems.Contains(_currentGameItem))
             {
-                //
-                // cast selected game item 
-                //
-                GameItemModel selectedGameItem = _currentGameItem as GameItemModel;
 
+                GameItemModel selectedGameItem = _currentGameItem as GameItemModel;
+                switch (_currentGameItem)
+                {
+                    case LightSaberParts lightSaber:
+                        AddLightsaberProgress(lightSaber);
+                        break;
+                    default:
+                        break;
+                }
                 _currentLocation.RemoveGameItemModelFromLocation(selectedGameItem);
                 _player.AddGameItemToInventory(selectedGameItem);
             }
         }
+
+        private void AddLightsaberProgress(LightSaberParts lightSaber)
+        {
+            _player.LightsaberProgress += lightSaber.LightsaberProgress;
+        }
+
         public void RemoveItemFromInventory()
         {
-            //
-            // confirm a game item selected
-            // subtract from inventory and add to location
-            //
             if (_currentGameItem != null)
             {
-                //
-                // cast selected game item 
-                //
                 GameItemModel selectedGameItem = _currentGameItem as GameItemModel;
-
+                switch (_currentGameItem)
+                {
+                    case LightSaberParts lightSaber:
+                        RemoveLightsaberPercent(lightSaber);
+                        break;
+                    default:
+                        break;
+                }
                 _currentLocation.AddGameItemModelToLocation(selectedGameItem);
                 _player.RemoveGameItemFromInventory(selectedGameItem);
             }
         }
+
+        private void RemoveLightsaberPercent(LightSaberParts lightSaber)
+        {
+            _player.LightsaberProgress -= lightSaber.LightsaberProgress;
+        }
         #endregion
         private void OnPlayerMove()
         {
-            //
-            // set new current location
-            //
             foreach (Location location in AccessibleLocations)
             {
                 if (location.Name == _currentLocationName)
@@ -194,45 +204,53 @@ namespace Lightsaber_Builder_Game.Presentation
                     _currentLocation = location;
                 }
             }
-            //_currentLocation = AccessibleLocations.FirstOrDefault(l => l.Name == _currentLocationName);
             OnPropertyChanged(nameof(MessageDisplay));
             OnPropertyChanged(nameof(PlanetLog));
-            //
-            // update the list of locations
-            //
+
             UpdateAccessibleLocations();
         }
         private void UpdateAccessibleLocations()
         {
-            //
-            // reset accessible locations list
-            //
             _accessibleLocations.Clear();
 
-            //
-            // add all accessible locations to list
-            //
             foreach (Location location in _gamemap.Locations)
             {
-                if (
-                    location.Accessible == true)
+                if (location.Accessible == true)
                 {
                     _accessibleLocations.Add(location);
                 }
             }
 
-            //
-            // remove current location
-            //
             _accessibleLocations.Remove(_accessibleLocations.FirstOrDefault(l => l == _currentLocation));
 
-            //
-            // notify list box in view to update
-            //
             OnPropertyChanged(nameof(AccessibleLocations));
         }
+        public void OnUseGameItem()
+        {
+            switch (_currentGameItem)
+            {
+                case HealthItems healthItems:
+                    HealthItemUse(healthItems);
+                    break;
+                case Weapons weapons:
+                    WeaponsUse(weapons);
+                    break;
+                default:
+                    break;
+            }
+        }
 
+        private void HealthItemUse(HealthItems healthItems)
+        {
+            _player.Health += healthItems.HealthChange;
+            _player.Lives += healthItems.LivesChange;
+            _player.RemoveGameItemFromInventory(_currentGameItem);
+        }
 
+        private void WeaponsUse(Weapons weapons)
+        {
+            //Player.WeaponsInUse = weapons.Using;
+        }
 
         private TimeSpan GameTime()
         {
