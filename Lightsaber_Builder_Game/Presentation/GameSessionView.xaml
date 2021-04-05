@@ -112,6 +112,7 @@
                         x:Name="InventoryItemsDataGrid"
                         FontSize="20"
                         Height="225"
+                        Background="LightGray"
                         ItemsSource="{Binding Player.Inventory}" 
                         SelectedItem="{Binding CurrentGameItem}"
                         AutoGenerateColumns="False"
@@ -157,6 +158,10 @@
                 Background="Gray"
                 Style="{StaticResource BorderStyle}">
                 <StackPanel>
+                    <Label
+                        Content="Location Information"
+                        HorizontalAlignment="Center"
+                        Style="{StaticResource GameSessionLabelStyle}"/>
                     <TextBox
                         Name="PlanetInfoTextBox"
                         Height="100"
@@ -171,20 +176,21 @@
                         VerticalContentAlignment="top"/>
                     <TextBox
                         Name="MainLogTextBox"
-                        Height="200"
+                        Height="160"
                         Width="auto"
                         Margin="10"
                         FontSize="20"
                         Background="Gray"
                         BorderThickness="0"
                         TextWrapping="Wrap"
-                        Text="{Binding PlanetLog, Mode=OneWay}"
+                        Text="{Binding CurrentLocationInformation, Mode=OneWay}"
                         VerticalScrollBarVisibility="Auto"
                         VerticalContentAlignment="top"/>
                     <DataGrid
                         x:Name="LocationItemsDataGrid"
                         FontSize="20"
                         Height="125"
+                        Background="LightGray"
                         ItemsSource="{Binding CurrentLocation.GameItems}" 
                         SelectedItem="{Binding CurrentGameItem}"
                         AutoGenerateColumns="False"
@@ -235,17 +241,92 @@
                 Grid.Row="3"
                 Background="Gray"
                 Style="{StaticResource BorderStyle}">
-                <TextBox
-                    Name="CurrentQuestTextBox"
-                    Height="auto"
-                    Width="auto"
-                    Margin="10"
-                    Background="Gray"
-                    BorderThickness="0"
-                    TextWrapping="Wrap"
-                    Text="{Binding MessageDisplayQuestObjectives, Mode=OneWay}"
-                    VerticalScrollBarVisibility="Auto"
-                    VerticalContentAlignment="top"/>
+                <TabControl
+                    x:Name="TabControl"
+                    Background="Gray">
+                    <TabItem
+                        Header="NPCS"
+                        Width="150"
+                        Height="40"
+                        FontSize="20">
+                        <StackPanel>
+                            <DataGrid
+                                x:Name="NPCSDataGrid"
+                                FontSize="20"
+                                Height="200"
+                                VerticalAlignment="Top"
+                                Background="LightGray"
+                                ItemsSource="{Binding CurrentLocation.NPCs}" 
+                                SelectedItem="{Binding CurrentNPC}"
+                                AutoGenerateColumns="False"
+                                HeadersVisibility="Column">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn 
+                                    Header="NPCS"
+                                    IsReadOnly="True"                 
+                                    Binding="{Binding Information, Mode=OneWay}"
+                                    Width="*">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style>
+                                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <StackPanel
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                                <Button
+                                    Content="Talk"
+                                    Margin="0,10,50,0"
+                                    Style="{StaticResource ButtonGameSessionStyle}"
+                                    Click="TalkToButton_Click"/>
+                                <Button
+                                    Content="Accept Quest"
+                                    Margin="0,10,0,0"
+                                    Style="{StaticResource ButtonGameSessionStyle}"
+                                    Click="AcceptQuestButton_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem
+                        Header="Quest Log"
+                        Width="150"
+                        Height="40"
+                        FontSize="20">
+                        <TextBox
+                        Name="CurrentQuestTextBox"
+                        Height="auto"
+                        Width="auto"
+                        Margin="10"
+                        Background="Gray"
+                        BorderThickness="0"
+                        TextWrapping="Wrap"
+                        Text="{Binding MessageDisplayQuestObjectives, Mode=OneWay}"
+                        VerticalScrollBarVisibility="Auto"
+                        VerticalContentAlignment="top"/>
+                    </TabItem>
+                    <TabItem
+                        Header="Quests"
+                        Width="150"
+                        Height="40"
+                        FontSize="20">
+                        <DataGrid
+                            x:Name="QuestDataGrid"
+                            FontSize="20"
+                            Height="250"
+                            VerticalAlignment="Top"
+                            Background="LightGray"
+                            ItemsSource="{Binding CurrentLocation.GameItems}" 
+                            SelectedItem="{Binding CurrentGameItem}"
+                            AutoGenerateColumns="False"
+                            HeadersVisibility="Column">
+                            
+                        </DataGrid>
+                    </TabItem>
+                </TabControl>
+
             </Border>
         </Grid>
         <Grid Grid.Column="2">
@@ -373,7 +454,7 @@
                             Height="40"
                             Width="150"
                             FontSize="25"
-                            Text="{Binding Player.WeponInUse}"/>
+                            Text="{Binding Player.WeaponsInUse}"/>
                     </StackPanel>
                     <StackPanel
                         Orientation="Horizontal"

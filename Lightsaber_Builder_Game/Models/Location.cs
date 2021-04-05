@@ -10,6 +10,7 @@ namespace Lightsaber_Builder_Game.Models
     public class Location : ObservableObject
     {
         #region FIELDS
+
         private int _id;
         private string _name;
         private string _description;
@@ -18,21 +19,22 @@ namespace Lightsaber_Builder_Game.Models
         private string _planetColor;
         private string _planetLog;
         private ObservableCollection<GameItemModel> _gameItems;
+        private ObservableCollection<NPCS> _npcs;
+
         #endregion
 
         #region PROPERTIES
+
         public int ID
         {
             get { return _id; }
             set { _id = value; }
         }
-
         public string Name
         {
             get { return _name; }
             set { _name = value; }
         }
-
         public string PlanetColor
         {
             get { return _planetColor; }
@@ -60,24 +62,36 @@ namespace Lightsaber_Builder_Game.Models
         public string PlanetLog
         {
             get { return _planetLog; }
-            set { _planetLog = value; }
+            set 
+            { 
+                _planetLog = value;
+                OnPropertyChanged(nameof(PlanetLog));
+            }
         }
-
+        public ObservableCollection<NPCS> NPCs
+        {
+            get { return _npcs; }
+            set { _npcs = value; }
+        }
         public ObservableCollection<GameItemModel> GameItems
         {
             get { return _gameItems; }
             set { _gameItems = value; }
         }
+
         #endregion
 
         #region CONSTRUCTORS
+
         public Location()
         {
             _gameItems = new ObservableCollection<GameItemModel>();
         }
+
         #endregion
 
         #region METHODS
+
         public void UpdateLocationGameItems()
         {
             ObservableCollection<GameItemModel> updatedLocationGameItems = new ObservableCollection<GameItemModel>();

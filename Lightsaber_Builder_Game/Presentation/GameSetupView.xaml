@@ -84,7 +84,8 @@
             <Button 
                 Name="DoneButton"
                 Content="Done"
-                Margin="20" Click="DoneButton_Click"/>
+                Margin="20" 
+                Click="DoneButton_Click"/>
             <TextBlock
                 Name="ErrorTextBlock"
                 Foreground="Red"

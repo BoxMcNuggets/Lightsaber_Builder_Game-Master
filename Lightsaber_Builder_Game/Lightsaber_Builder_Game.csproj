@@ -78,9 +78,13 @@
     <Compile Include="Models\Credits.cs" />
     <Compile Include="Models\GameItemModel.cs" />
     <Compile Include="Models\HealthItems.cs" />
+    <Compile Include="Models\ISpeak.cs" />
+    <Compile Include="Models\KyberCrystals.cs" />
     <Compile Include="Models\LightSaberParts.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Map.cs" />
+    <Compile Include="Models\NPCS.cs" />
+    <Compile Include="Models\NPCSpeak.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Weapons.cs" />
     <Compile Include="ObservableObject.cs" />

@@ -17,7 +17,9 @@ namespace Lightsaber_Builder_Game.Models
             Ithorians,
             MonCalamari,
             Togruta,
-            Zabrak
+            Zabrak,
+            Droid,
+            Unknown
         }
 
         #endregion
@@ -43,7 +45,6 @@ namespace Lightsaber_Builder_Game.Models
                 OnPropertyChanged(nameof(Id));
             }
         }
-
         public string Name
         {
             get { return _name; }
@@ -53,7 +54,6 @@ namespace Lightsaber_Builder_Game.Models
                 OnPropertyChanged(nameof(Name));
             }
         }
-
         public int LocationId
         {
             get { return _locationId; }
@@ -63,7 +63,6 @@ namespace Lightsaber_Builder_Game.Models
                 OnPropertyChanged(nameof(LocationId));
             }
         }
-
         public int Age
         {
             get { return _age; }
@@ -73,7 +72,6 @@ namespace Lightsaber_Builder_Game.Models
                 OnPropertyChanged(nameof(Age));
             }
         }
-
         public RaceType Race
         {
             get { return _race; }
@@ -93,11 +91,11 @@ namespace Lightsaber_Builder_Game.Models
 
         }
 
-        public Character(string name, RaceType race, int locationId)
+        public Character(int id, string name, RaceType race)
         {
+            _id = id;
             _name = name;
             _race = race;
-            _locationId = locationId;
         }
 
         #endregion

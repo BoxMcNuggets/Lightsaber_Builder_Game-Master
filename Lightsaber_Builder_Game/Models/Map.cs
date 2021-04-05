@@ -9,9 +9,15 @@ namespace Lightsaber_Builder_Game.Models
 {
     public class Map
     {
+        #region FIELDS
+
         private List<Location> _locations;
         private Location _currentlocation;
         private ObservableCollection<Location> _accessibleLocations;
+
+        #endregion
+
+        #region PROPERTIES
 
         public List<Location> Locations
         {
@@ -28,6 +34,9 @@ namespace Lightsaber_Builder_Game.Models
             get { return _accessibleLocations; }
             set { _accessibleLocations = value; }
         }
+
+        #endregion
+
         public Map() 
         {
             _locations = new List<Location>();

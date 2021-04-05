@@ -35,6 +35,8 @@ namespace Lightsaber_Builder_Game.Presentation
             this.Title = "Non Official Lucasfilms Game";
         }
 
+        #region Buttons Click
+
         private void PickUpButton_Click(object sender, RoutedEventArgs e)
         {
             if (LocationItemsDataGrid.SelectedItem != null)
@@ -63,5 +65,20 @@ namespace Lightsaber_Builder_Game.Presentation
         {
             Environment.Exit(0);
         }
+
+        private void TalkToButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (NPCSDataGrid.SelectedItem != null)
+            {
+                _gameSessionViewModel.OnPlayerTalk();
+            }
+        }
+        private void AcceptQuestButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        #endregion
+
     }
 }

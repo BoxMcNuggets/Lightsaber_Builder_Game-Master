@@ -33,8 +33,6 @@ namespace Lightsaber_Builder_Game.Models
 
         #region PROPERTIES
 
-
-
         public int LightsaberProgress
         {
             get { return _lightsaberProgress; }
@@ -53,7 +51,6 @@ namespace Lightsaber_Builder_Game.Models
                 OnPropertyChanged(nameof(WeaponsInUse));
             }
         }
-
         public int Lives
         {
             get { return _lives; }
@@ -63,7 +60,6 @@ namespace Lightsaber_Builder_Game.Models
                 OnPropertyChanged(nameof(Lives));
             }
         }
-
         public ForceSide JobTitle
         {
             get { return _forceSide; }
@@ -73,7 +69,6 @@ namespace Lightsaber_Builder_Game.Models
                 OnPropertyChanged(nameof(JobTitle));
             }
         }
-
         public int Health
         {
             get { return _health; }
@@ -93,31 +88,26 @@ namespace Lightsaber_Builder_Game.Models
                 OnPropertyChanged(nameof(Health));
             }
         }
-
         public List<Location> LocationsVisited
         {
             get { return _locationsVisited; }
             set { _locationsVisited = value; }
         }
-
         public ObservableCollection<GameItemModel> Inventory
         {
             get { return _inventory; }
             set { _inventory = value; }
         }
-
         public ObservableCollection<GameItemModel> Weapons
         {
             get { return _weapons; }
             set { _weapons = value; }
         }
-
         public ObservableCollection<GameItemModel> HealthItems
         {
             get { return _healthItems; }
             set { _healthItems = value; }
         }
-
         public ObservableCollection<GameItemModel> Credits
         {
             get { return _credits; }
@@ -128,9 +118,11 @@ namespace Lightsaber_Builder_Game.Models
             get { return _lightSaberParts; }
             set { _lightSaberParts = value; }
         }
+
         #endregion
 
         #region CONSTRUCTORS
+
         public Player()
         {
             _locationsVisited = new List<Location>();
@@ -143,6 +135,9 @@ namespace Lightsaber_Builder_Game.Models
         #endregion
 
         #region METHODS
+
+        #region Inventory
+
         public void UpdateInventoryCategories()
         {
             HealthItems.Clear();
@@ -172,6 +167,9 @@ namespace Lightsaber_Builder_Game.Models
                 _inventory.Remove(selectedGameItem);
             }
         }
+
+        #endregion
+
         public override string DefaultGreeting()
         {
             string article = "a";

@@ -11,9 +11,9 @@ namespace Lightsaber_Builder_Game.Models
         public int MinimumDamage { get; set; }
         public int MaximumDamage { get; set; }
 
-        public bool Using { get; set; }
+        public string Using { get; set; }
 
-        public Weapons(int id, string name, int value, int minDamage, int maxDamage, string description, bool inUse)
+        public Weapons(int id, string name, int value, int minDamage, int maxDamage, string description, string inUse)
             : base(id, name, value, description)
         {
             MinimumDamage = minDamage;

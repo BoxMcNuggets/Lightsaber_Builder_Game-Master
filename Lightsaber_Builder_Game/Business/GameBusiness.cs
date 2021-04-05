@@ -31,7 +31,7 @@ namespace Lightsaber_Builder_Game.Business
                 _playerSetupView = new GameSetupView(_player);
                 _playerSetupView.ShowDialog();
 
-                _player.Health = 70;
+                _player.Health = 100;
                 _player.Lives = 3;
             }
             else

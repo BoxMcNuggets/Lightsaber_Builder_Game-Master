@@ -6,27 +6,24 @@ using System.Threading.Tasks;
 
 namespace Lightsaber_Builder_Game.Models
 {
-    class LightSaberParts : GameItemModel
+    class KyberCrystals : GameItemModel
     {
-        public enum LightsaberPart 
+        public enum KyberCrystal 
         {
-            BladeEmitter,
-            MainHilt,
-            Controls,
-            HandGrip,
-            EnergyCore,
+            Red,
+            Blue, 
+            Black, 
+            Green
         }
-
-        public LightsaberPart Type { get; set; }
+        public KyberCrystal Color { get; set; }
         public int LightsaberProgress { get; set; }
 
-        public LightSaberParts(int id, string name, int value, LightsaberPart type, string description, int LightsaberProg)
-            : base(id, name, value, description)
+        public KyberCrystals(int id, string name, int value, KyberCrystal color, string description, int LightsaberProg)
+            : base(id, name, value, description) 
         {
-            Type = type;
+            Color = color;
             LightsaberProgress = LightsaberProg;
         }
-
         public override string InformationString()
         {
             return $"{Name}: {Description}\nValue: {Value}";
