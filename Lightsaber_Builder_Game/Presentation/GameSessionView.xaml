@@ -204,7 +204,8 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn 
                                 Header="Items"
-                                IsReadOnly="True"                 
+                                IsReadOnly="True"
+                                FontSize="15"
                                 Binding="{Binding GameItemModel.Information, Mode=OneWay}"
                                 Width="*">
                                 <DataGridTextColumn.ElementStyle>
@@ -217,6 +218,7 @@
                                 Header="Qty"
                                 IsReadOnly="True"
                                 Width="75"
+                                FontSize="15"
                                 Binding="{Binding Quantity, Mode=OneWay}"/>
                         </DataGrid.Columns>
                     </DataGrid>
@@ -274,7 +276,8 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn 
                                     Header="NPCS"
-                                    IsReadOnly="True"                 
+                                    IsReadOnly="True"
+                                    FontSize="15"
                                     Binding="{Binding Information, Mode=OneWay}"
                                     Width="*">
                                         <DataGridTextColumn.ElementStyle>

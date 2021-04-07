@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lightsaber_Builder_Game.Models
 {
-    class Mission
+    public class Mission
     {
         #region ENUMS
 

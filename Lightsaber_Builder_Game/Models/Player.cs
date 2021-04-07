@@ -23,6 +23,7 @@ namespace Lightsaber_Builder_Game.Models
         private string _weaponsInUse;
         private ForceSide _forceSide;
         private List<Location> _locationsVisited;
+        private List<NPCS> _npcsDefeated;
         private ObservableCollection<GameItemModelQuantity> _inventory;
         private ObservableCollection<GameItemModelQuantity> _healthItems;
         private ObservableCollection<GameItemModelQuantity> _credits;
@@ -94,6 +95,12 @@ namespace Lightsaber_Builder_Game.Models
             get { return _locationsVisited; }
             set { _locationsVisited = value; }
         }
+        public List<NPCS> NPCSDefeated
+        {
+            get { return _npcsDefeated; }
+            set { _npcsDefeated = value; }
+        }
+
         public ObservableCollection<GameItemModelQuantity> Inventory
         {
             get { return _inventory; }
@@ -124,6 +131,13 @@ namespace Lightsaber_Builder_Game.Models
             get { return _kyberCrystals; }
             set { _kyberCrystals = value; }
         }
+        private ObservableCollection<Mission> _missions;
+
+        public ObservableCollection<Mission> Mission
+        {
+            get { return _missions; }
+            set { _missions = value; }
+        }
 
 
         #endregion
@@ -133,15 +147,39 @@ namespace Lightsaber_Builder_Game.Models
         public Player()
         {
             _locationsVisited = new List<Location>();
+            _npcsDefeated = new List<NPCS>();
             _weapons = new ObservableCollection<GameItemModelQuantity>();
             _healthItems = new ObservableCollection<GameItemModelQuantity>();
             _credits = new ObservableCollection<GameItemModelQuantity>();
             _lightSaberParts = new ObservableCollection<GameItemModelQuantity>();
+            _missions = new ObservableCollection<Mission>();
         }
 
         #endregion
 
         #region METHODS
+
+        #region Missions
+
+        //public void UpdateMissionStatus() 
+        //{
+        //    foreach (Mission mission in _missions.Where(m => m.Status == Models.Mission.MissionStatus.Incomplete))
+        //    {
+        //        if (mission is MissionLightsaberParts)
+        //        {
+        //            if (((MissionLightsaberParts)mission).GameItemModelQuantityMissionToDo(_inventory.ToList()).Count == 0)
+        //            {
+        //                mission.Status = Mission.MissionStatus.Complete;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            throw new Exception("Unknown Mission Child Class");
+        //        }
+        //    }
+        //}
+
+        #endregion
 
         #region Inventory
 
