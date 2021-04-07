@@ -11,7 +11,7 @@ namespace Lightsaber_Builder_Game.Business
 {
     public class GameBusiness
     {
-        bool _newPlayer = true;
+        bool _newPlayer = false;
 
         GameSessionViewModel _gameSessionViewModel;
         Player _player = new Player();

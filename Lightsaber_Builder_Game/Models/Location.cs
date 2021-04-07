@@ -18,7 +18,7 @@ namespace Lightsaber_Builder_Game.Models
         private string _message;
         private string _planetColor;
         private string _planetLog;
-        private ObservableCollection<GameItemModel> _gameItems;
+        private ObservableCollection<GameItemModelQuantity> _gameItems;
         private ObservableCollection<NPCS> _npcs;
 
         #endregion
@@ -73,7 +73,7 @@ namespace Lightsaber_Builder_Game.Models
             get { return _npcs; }
             set { _npcs = value; }
         }
-        public ObservableCollection<GameItemModel> GameItems
+        public ObservableCollection<GameItemModelQuantity> GameItems
         {
             get { return _gameItems; }
             set { _gameItems = value; }
@@ -85,7 +85,7 @@ namespace Lightsaber_Builder_Game.Models
 
         public Location()
         {
-            _gameItems = new ObservableCollection<GameItemModel>();
+            _gameItems = new ObservableCollection<GameItemModelQuantity>();
         }
 
         #endregion
@@ -94,34 +94,53 @@ namespace Lightsaber_Builder_Game.Models
 
         public void UpdateLocationGameItems()
         {
-            ObservableCollection<GameItemModel> updatedLocationGameItems = new ObservableCollection<GameItemModel>();
+            ObservableCollection<GameItemModelQuantity> updatedLocationGameItems = new ObservableCollection<GameItemModelQuantity>();
 
-            foreach (GameItemModel GameItem in _gameItems)
+            foreach (GameItemModelQuantity GameItemQuantity in _gameItems)
             {
-                updatedLocationGameItems.Add(GameItem);
+                updatedLocationGameItems.Add(GameItemQuantity);
             }
 
             GameItems.Clear();
 
-            foreach (GameItemModel gameItem in updatedLocationGameItems)
+            foreach (GameItemModelQuantity GameItemQuantity in updatedLocationGameItems)
             {
-                GameItems.Add(gameItem);
+                GameItems.Add(GameItemQuantity);
             }
         }
-        public void AddGameItemModelToLocation(GameItemModel selectedGameItem)
+        public void AddGameItemModelToLocation(GameItemModelQuantity selectedGameItemQuantity)
         {
-            if (selectedGameItem != null)
+            GameItemModelQuantity gameItemQuantity = _gameItems.FirstOrDefault(i => i.GameItemModel.Id == selectedGameItemQuantity.GameItemModel.Id);
+
+            if (gameItemQuantity == null)
             {
-                _gameItems.Add(selectedGameItem);
+                GameItemModelQuantity newGameItemModelQuantity = new GameItemModelQuantity();
+                newGameItemModelQuantity.GameItemModel = selectedGameItemQuantity.GameItemModel;
+                newGameItemModelQuantity.Quantity = 1;
+
+                _gameItems.Add(newGameItemModelQuantity);
+            }
+            else
+            {
+                gameItemQuantity.Quantity++;
             }
 
             UpdateLocationGameItems();
         }
-        public void RemoveGameItemModelFromLocation(GameItemModel selectedGameItem)
+        public void RemoveGameItemModelFromLocation(GameItemModelQuantity selectedGameItemQuantity)
         {
-            if (selectedGameItem != null)
+            GameItemModelQuantity gameItemQuantity = _gameItems.FirstOrDefault(i => i.GameItemModel.Id == selectedGameItemQuantity.GameItemModel.Id);
+
+            if (selectedGameItemQuantity != null)
             {
-                _gameItems.Remove(selectedGameItem);
+                if (selectedGameItemQuantity.Quantity == 1)
+                {
+                    _gameItems.Remove(gameItemQuantity);
+                }
+                else
+                {
+                    gameItemQuantity.Quantity--;
+                }
             }
 
             UpdateLocationGameItems();

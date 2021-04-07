@@ -23,11 +23,12 @@ namespace Lightsaber_Builder_Game.Models
         private string _weaponsInUse;
         private ForceSide _forceSide;
         private List<Location> _locationsVisited;
-        private ObservableCollection<GameItemModel> _inventory = new ObservableCollection<GameItemModel>();
-        private ObservableCollection<GameItemModel> _healthItems;
-        private ObservableCollection<GameItemModel> _credits;
-        private ObservableCollection<GameItemModel> _weapons;
-        private ObservableCollection<GameItemModel> _lightSaberParts;
+        private ObservableCollection<GameItemModelQuantity> _inventory;
+        private ObservableCollection<GameItemModelQuantity> _healthItems;
+        private ObservableCollection<GameItemModelQuantity> _credits;
+        private ObservableCollection<GameItemModelQuantity> _weapons;
+        private ObservableCollection<GameItemModelQuantity> _lightSaberParts;
+        private ObservableCollection<GameItemModelQuantity> _kyberCrystals;
 
         #endregion
 
@@ -93,31 +94,37 @@ namespace Lightsaber_Builder_Game.Models
             get { return _locationsVisited; }
             set { _locationsVisited = value; }
         }
-        public ObservableCollection<GameItemModel> Inventory
+        public ObservableCollection<GameItemModelQuantity> Inventory
         {
             get { return _inventory; }
             set { _inventory = value; }
         }
-        public ObservableCollection<GameItemModel> Weapons
+        public ObservableCollection<GameItemModelQuantity> Weapons
         {
             get { return _weapons; }
             set { _weapons = value; }
         }
-        public ObservableCollection<GameItemModel> HealthItems
+        public ObservableCollection<GameItemModelQuantity> HealthItems
         {
             get { return _healthItems; }
             set { _healthItems = value; }
         }
-        public ObservableCollection<GameItemModel> Credits
+        public ObservableCollection<GameItemModelQuantity> Credits
         {
             get { return _credits; }
             set { _credits = value; }
         }
-        public ObservableCollection<GameItemModel> LightSaberParts
+        public ObservableCollection<GameItemModelQuantity> LightSaberParts
         {
             get { return _lightSaberParts; }
             set { _lightSaberParts = value; }
         }
+        public ObservableCollection<GameItemModelQuantity> KyberCrystals
+        {
+            get { return _kyberCrystals; }
+            set { _kyberCrystals = value; }
+        }
+
 
         #endregion
 
@@ -126,10 +133,10 @@ namespace Lightsaber_Builder_Game.Models
         public Player()
         {
             _locationsVisited = new List<Location>();
-            _weapons = new ObservableCollection<GameItemModel>();
-            _healthItems = new ObservableCollection<GameItemModel>();
-            _credits = new ObservableCollection<GameItemModel>();
-            _lightSaberParts = new ObservableCollection<GameItemModel>();
+            _weapons = new ObservableCollection<GameItemModelQuantity>();
+            _healthItems = new ObservableCollection<GameItemModelQuantity>();
+            _credits = new ObservableCollection<GameItemModelQuantity>();
+            _lightSaberParts = new ObservableCollection<GameItemModelQuantity>();
         }
 
         #endregion
@@ -145,27 +152,51 @@ namespace Lightsaber_Builder_Game.Models
             Credits.Clear();
             LightSaberParts.Clear();
 
-            foreach (var gameItem in _inventory)
+
+            foreach (var gameItemModelQuantity in _inventory)
             {
-                if (gameItem is HealthItems) HealthItems.Add(gameItem);
-                if (gameItem is Weapons) Weapons.Add(gameItem);
-                if (gameItem is Credits) Credits.Add(gameItem);
-                if (gameItem is LightSaberParts) LightSaberParts.Add(gameItem);
+                if (gameItemModelQuantity.GameItemModel is HealthItems) HealthItems.Add(gameItemModelQuantity);
+                if (gameItemModelQuantity.GameItemModel is Weapons) Weapons.Add(gameItemModelQuantity);
+                if (gameItemModelQuantity.GameItemModel is Credits) Credits.Add(gameItemModelQuantity);
+                if (gameItemModelQuantity.GameItemModel is LightSaberParts) LightSaberParts.Add(gameItemModelQuantity);
+
             }
         }
-        public void AddGameItemToInventory(GameItemModel selectedGameItem)
+        public void AddGameItemModelToInventory(GameItemModelQuantity selectedGameItemModelQuantity)
         {
-            if (selectedGameItem != null)
+            GameItemModelQuantity gameItemModelQuantity = _inventory.FirstOrDefault(i => i.GameItemModel.Id == selectedGameItemModelQuantity.GameItemModel.Id);
+
+            if (gameItemModelQuantity == null)
             {
-                _inventory.Add(selectedGameItem);
+                GameItemModelQuantity newGameItemModelQuantity = new GameItemModelQuantity();
+                newGameItemModelQuantity.GameItemModel = selectedGameItemModelQuantity.GameItemModel;
+                newGameItemModelQuantity.Quantity = 1;
+
+                _inventory.Add(newGameItemModelQuantity);
             }
+            else
+            {
+                gameItemModelQuantity.Quantity++;
+            }
+
+            UpdateInventoryCategories();
         }
-        public void RemoveGameItemFromInventory(GameItemModel selectedGameItem)
+        public void RemoveGameItemModelToInventory(GameItemModelQuantity selectedGameItemModelQuantity)
         {
-            if (selectedGameItem != null)
+            GameItemModelQuantity gameItemModelQuantity = _inventory.FirstOrDefault(i => i.GameItemModel.Id == selectedGameItemModelQuantity.GameItemModel.Id);
+
+            if (gameItemModelQuantity != null)
             {
-                _inventory.Remove(selectedGameItem);
+                if (selectedGameItemModelQuantity.Quantity == 1)
+                {
+                    _inventory.Remove(gameItemModelQuantity);
+                }
+                else
+                {
+                    gameItemModelQuantity.Quantity--;
+                }
             }
+            UpdateInventoryCategories();
         }
 
         #endregion

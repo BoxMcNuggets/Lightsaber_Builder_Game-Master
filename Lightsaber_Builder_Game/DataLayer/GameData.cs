@@ -34,7 +34,7 @@ namespace Lightsaber_Builder_Game.DataLayer
                 Race = Character.RaceType.Human,
                 Health = 100,
                 Lives = 3,
-                Inventory = new ObservableCollection<GameItemModel>()
+                Inventory = new ObservableCollection<GameItemModelQuantity>()
                 {
 
                 }
@@ -58,11 +58,11 @@ namespace Lightsaber_Builder_Game.DataLayer
                 Message = "Welcome to your ship, From your ship you can travel to other places. Dont forget " +
                     "to grab your Blaster",
                 PlanetLog = "",
-                GameItems = new ObservableCollection<GameItemModel>
+                GameItems = new ObservableCollection<GameItemModelQuantity>
                 {
-                    GameItemModelById(40),
-                    GameItemModelById(10),
-                    GameItemModelById(11)
+                    new GameItemModelQuantity(GameItemModelById(40), 1),
+                    new GameItemModelQuantity(GameItemModelById(10), 1),
+                    new GameItemModelQuantity(GameItemModelById(11), 1)
                 }
             }
             );
@@ -83,10 +83,10 @@ namespace Lightsaber_Builder_Game.DataLayer
                             Accessible = true,
                             Message = "The city covered planet, It might be usefull to do some shopping while your here",
                             PlanetLog = "Once you have most of the lightsaber parts come back here to get your energy core",
-                            GameItems = new ObservableCollection<GameItemModel>
+                            GameItems = new ObservableCollection<GameItemModelQuantity>
                             {
-                                GameItemModelById(34),
-                                GameItemModelById(20)
+                                new GameItemModelQuantity(GameItemModelById(34), 1),
+                                new GameItemModelQuantity(GameItemModelById(20), 1)
                             },
                             NPCs = new ObservableCollection<NPCS>
                             {
@@ -107,9 +107,9 @@ namespace Lightsaber_Builder_Game.DataLayer
                             Accessible = true,
                             Message = "This is the Death Star, here you can find the dark lords Darth Sidious and Darth Vader",
                             PlanetLog = "Once you have most of the lightsaber parts come back here to get your energy core",
-                            GameItems = new ObservableCollection<GameItemModel>
+                            GameItems = new ObservableCollection<GameItemModelQuantity>
                             {
-                                GameItemModelById(34)
+                                new GameItemModelQuantity(GameItemModelById(34), 1)
                             },
                             NPCs = new ObservableCollection<NPCS>
                             {
@@ -134,13 +134,13 @@ namespace Lightsaber_Builder_Game.DataLayer
                     Accessible = true,
                     Message = "Hoth is a frozen winter planet with lots of life, but be careful because not everything is friendly",
                     PlanetLog = "Wampas are notorious on the planet hoth, im sure you could find some lightsaber parts in one of their caves",
-                    GameItems = new ObservableCollection<GameItemModel>
+                    GameItems = new ObservableCollection<GameItemModelQuantity>
                     {
-                        GameItemModelById(31),
-                        GameItemModelById(20),
-                        GameItemModelById(10),
-                        GameItemModelById(11),
-                        GameItemModelById(50)
+                        new GameItemModelQuantity(GameItemModelById(31), 1),
+                        new GameItemModelQuantity(GameItemModelById(20), 1),
+                        new GameItemModelQuantity(GameItemModelById(10), 1),
+                        new GameItemModelQuantity(GameItemModelById(11), 1),
+                        new GameItemModelQuantity(GameItemModelById(50), 1)
                     },
                     NPCs = new ObservableCollection<NPCS>
                     {
@@ -164,11 +164,11 @@ namespace Lightsaber_Builder_Game.DataLayer
                         " husband to life. The resulting gravimetric duel between the gas giants Jestefad and Lefrani over " +
                         "Mustafar heated the planet's core, transforming the lush world into an imbalanced volcanic hellscape.",
                     PlanetLog = "there was once a factory on this planet that was destroyed. You might be able to find the controls of a lightsaber in the ruins",
-                    GameItems = new ObservableCollection<GameItemModel>
+                    GameItems = new ObservableCollection<GameItemModelQuantity>
                     {
-                        GameItemModelById(32),
-                        GameItemModelById(21),
-                        GameItemModelById(52)
+                        new GameItemModelQuantity(GameItemModelById(32), 1),
+                        new GameItemModelQuantity(GameItemModelById(21), 1),
+                        new GameItemModelQuantity(GameItemModelById(52), 1)
                     },
                     NPCs = new ObservableCollection<NPCS>
                     {
@@ -188,11 +188,11 @@ namespace Lightsaber_Builder_Game.DataLayer
                     Accessible = true,
                     Message = "Welcome to Dagobah, Dagobah is a swampy planet said to have a strong connection with the force",
                     PlanetLog = "If you can get to where Master Yoda once Lived you might be able to find the Hand Grip to your Lightsaber",
-                    GameItems = new ObservableCollection<GameItemModel>
+                    GameItems = new ObservableCollection<GameItemModelQuantity>
                     {
-                        GameItemModelById(33),
-                        GameItemModelById(10),
-                        GameItemModelById(51)
+                        new GameItemModelQuantity(GameItemModelById(33), 1),
+                        new GameItemModelQuantity(GameItemModelById(10), 1),
+                        new GameItemModelQuantity(GameItemModelById(51), 1)
                     },
                     NPCs = new ObservableCollection<NPCS>
                     {
@@ -213,13 +213,13 @@ namespace Lightsaber_Builder_Game.DataLayer
                     Message = "Watch your back around here, the mandalorians are known as a peaceful race now but they" +
                         " used to be the most fearsome race in the galaxy",
                     PlanetLog = "You have gotten some intel that a Blade Emitter can be bought here",
-                    GameItems = new ObservableCollection<GameItemModel>
+                    GameItems = new ObservableCollection<GameItemModelQuantity>
                     {
-                        GameItemModelById(30),
-                        GameItemModelById(22),
-                        GameItemModelById(20),
-                        GameItemModelById(10),
-                        GameItemModelById(53)
+                        new GameItemModelQuantity(GameItemModelById(30), 1),
+                        new GameItemModelQuantity(GameItemModelById(22), 1),
+                        new GameItemModelQuantity(GameItemModelById(20), 1),
+                        new GameItemModelQuantity(GameItemModelById(10), 1),
+                        new GameItemModelQuantity(GameItemModelById(53), 1)
                     },
                     NPCs = new ObservableCollection<NPCS>
                     {
@@ -365,11 +365,11 @@ namespace Lightsaber_Builder_Game.DataLayer
                     Id = 108,
                     Name = "Wilhuff Tarken",
                     Race = Character.RaceType.Human,
-                    Description = "",
+                    Description = "An ambitious, ruthless proponent of military power, Wilhuff Tarkin became a favorite of Supreme Chancellor Palpatine and rose rapidly through the Imperial ranks.",
                     Messages = new List<string>()
                     {
-                        "",
-                        ""
+                        "Welcome to Mustafar",
+                        "The Jedi are extinct. Their fire has gone out of the universe. You, my friend, are all that's left of their religion."
                     }
                 }
             };

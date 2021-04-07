@@ -44,7 +44,6 @@ namespace Lightsaber_Builder_Game.Presentation
                 _gameSessionViewModel.AddItemToInventory();
             }
         }
-
         private void DropButton_Click(object sender, RoutedEventArgs e)
         {
             if (InventoryItemsDataGrid.SelectedItem != null)
@@ -52,7 +51,6 @@ namespace Lightsaber_Builder_Game.Presentation
                 _gameSessionViewModel.RemoveItemFromInventory();
             }
         }
-
         private void UseButton_Click(object sender, RoutedEventArgs e)
         {
             if (InventoryItemsDataGrid.SelectedItem != null)
@@ -60,12 +58,6 @@ namespace Lightsaber_Builder_Game.Presentation
                 _gameSessionViewModel.OnUseGameItem();
             }
         }
-
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            Environment.Exit(0);
-        }
-
         private void TalkToButton_Click(object sender, RoutedEventArgs e)
         {
             if (NPCSDataGrid.SelectedItem != null)
@@ -77,8 +69,17 @@ namespace Lightsaber_Builder_Game.Presentation
         {
 
         }
+        private void EnterLair_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
 
         #endregion
+
 
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using Lightsaber_Builder_Game.Models;
 
 namespace Lightsaber_Builder_Game.Presentation
@@ -27,7 +28,7 @@ namespace Lightsaber_Builder_Game.Presentation
         private Location _currentLocation;
         private ObservableCollection<Location> _accessibleLocations;
         private string _currentLocationName;
-        private GameItemModel _currentGameItem;
+        private GameItemModelQuantity _currentGameItem;
         private string _currentLocationInformation;
         private NPCS _currentNPC;
 
@@ -104,10 +105,14 @@ namespace Lightsaber_Builder_Game.Presentation
                 OnPropertyChanged(nameof(CurrentLocationInformation));
             }
         }
-        public GameItemModel CurrentGameItem
+        public GameItemModelQuantity CurrentGameItem
         {
             get { return _currentGameItem; }
-            set { _currentGameItem = value; }
+            set 
+            { 
+                _currentGameItem = value;
+                OnPropertyChanged(nameof(CurrentGameItem));
+            }
         }
         public NPCS CurrentNPC
         {
@@ -139,6 +144,8 @@ namespace Lightsaber_Builder_Game.Presentation
             _accessibleLocations = new ObservableCollection<Location>();
 
             InitializeView();
+
+            GameTimer();
         }
 
         #endregion
@@ -152,35 +159,62 @@ namespace Lightsaber_Builder_Game.Presentation
             _player.UpdateInventoryCategories();
         }
 
-        #region Add Lightsaber Parts/Progress
+        #region Add Item To Inventory
         public void AddItemToInventory()
         {
             if (_currentGameItem != null && _currentLocation.GameItems.Contains(_currentGameItem))
             {
+                GameItemModelQuantity selectedGameItemModelQuantity = _currentGameItem as GameItemModelQuantity;
 
-                GameItemModel selectedGameItem = _currentGameItem as GameItemModel;
-                switch (_currentGameItem)
+                switch (_currentGameItem.GameItemModel)
                 {
                     case LightSaberParts lightSaber:
-                        AddLightsaberProgress(lightSaber, selectedGameItem);
+                        AddLightsaberProgress(lightSaber, selectedGameItemModelQuantity);
                         break;
                     case KyberCrystals kybercrystal:
-                        AddLightsaberCrystalProgress(kybercrystal, selectedGameItem);
+                        AddLightsaberCrystalProgress(kybercrystal, selectedGameItemModelQuantity);
                         break;
                     default:
-                        _currentLocation.RemoveGameItemModelFromLocation(selectedGameItem);
-                        _player.AddGameItemToInventory(selectedGameItem);
+                        _currentLocation.RemoveGameItemModelFromLocation(selectedGameItemModelQuantity);
+                        _player.AddGameItemModelToInventory(selectedGameItemModelQuantity);
                         break;
                 }
             }
         }
-        private void AddLightsaberCrystalProgress(KyberCrystals kybercrystal, GameItemModel selectedGameItem)
+
+        #endregion
+
+        #region Remove Item From Inventory
+        public void RemoveItemFromInventory()
+        {
+            if (_currentGameItem != null)
+            {
+                GameItemModelQuantity selectedGameItemQuantity = _currentGameItem as GameItemModelQuantity;
+
+                switch (_currentGameItem.GameItemModel)
+                {
+                    case LightSaberParts lightSaber:
+                        RemoveLightsaberPercent(lightSaber);
+                        break;
+                    case KyberCrystals kybercrystal:
+                        RemoveLightsaberCrystalProgress(kybercrystal);
+                        break;
+                    default:
+                        _currentLocation.AddGameItemModelToLocation(selectedGameItemQuantity);
+                        _player.RemoveGameItemModelToInventory(selectedGameItemQuantity);
+                        break;
+                }
+
+            }
+        }
+
+        private void AddLightsaberCrystalProgress(KyberCrystals kybercrystal, GameItemModelQuantity selectedGameItemModelQuantity)
         {
             if (_player.LightsaberProgress == 85)
             {
                 _player.LightsaberProgress += kybercrystal.LightsaberProgress;
-                _currentLocation.RemoveGameItemModelFromLocation(selectedGameItem);
-                _player.AddGameItemToInventory(selectedGameItem);
+                _currentLocation.RemoveGameItemModelFromLocation(selectedGameItemModelQuantity);
+                _player.AddGameItemModelToInventory(selectedGameItemModelQuantity);
             }
             else if (_player.LightsaberProgress == 100)
             {
@@ -191,34 +225,11 @@ namespace Lightsaber_Builder_Game.Presentation
                 MessageBoxResult result = MessageBox.Show("Error: You need to gather all the lightsaber parts first.");
             }
         }
-        private void AddLightsaberProgress(LightSaberParts lightSaber, GameItemModel selectedGameItem)
+        private void AddLightsaberProgress(LightSaberParts lightSaber, GameItemModelQuantity selectedGameItemModelQuantity)
         {
             _player.LightsaberProgress += lightSaber.LightsaberProgress;
-            _currentLocation.RemoveGameItemModelFromLocation(selectedGameItem);
-            _player.AddGameItemToInventory(selectedGameItem);
-        }
-        #endregion
-
-        #region Remove Lightsaber Parts/Progress
-        public void RemoveItemFromInventory()
-        {
-            if (_currentGameItem != null)
-            {
-                GameItemModel selectedGameItem = _currentGameItem as GameItemModel;
-                switch (_currentGameItem)
-                {
-                    case LightSaberParts lightSaber:
-                        RemoveLightsaberPercent(lightSaber);
-                        break;
-                    case KyberCrystals kybercrystal:
-                        RemoveLightsaberCrystalProgress(kybercrystal);
-                        break;
-                    default:
-                        break;
-                }
-                _currentLocation.AddGameItemModelToLocation(selectedGameItem);
-                _player.RemoveGameItemFromInventory(selectedGameItem);
-            }
+            _currentLocation.RemoveGameItemModelFromLocation(selectedGameItemModelQuantity);
+            _player.AddGameItemModelToInventory(selectedGameItemModelQuantity);
         }
         private void RemoveLightsaberCrystalProgress(KyberCrystals kybercrystal)
         {
@@ -266,31 +277,59 @@ namespace Lightsaber_Builder_Game.Presentation
         #region On Use
         public void OnUseGameItem()
         {
-            switch (_currentGameItem)
+            if (_currentGameItem == null)
             {
-                case HealthItems healthItems:
-                    HealthItemUse(healthItems);
-                    break;
-                case Weapons weapons:
-                    WeaponsUse(weapons);
-                    break;
-                default:
-                    break;
+                MessageBoxResult result = MessageBox.Show("Error: You need to select an item.");
+            }
+            else
+            {
+                 switch (_currentGameItem.GameItemModel)
+                {
+                    case HealthItems healthItems:
+                        HealthItemUse(healthItems);
+                        break;
+                    case Weapons weapons:
+                        WeaponsUse(weapons);
+                        break;
+                    default:
+                    
+                        break;
+                }               
             }
         }
         private void HealthItemUse(HealthItems healthItems)
         {
             _player.Health += healthItems.HealthChange;
             _player.Lives += healthItems.LivesChange;
-            _currentLocation.PlanetLog += $"You have restored {_currentGameItem.Value} healthpoints.";
-            _player.RemoveGameItemFromInventory(_currentGameItem);
+            _player.RemoveGameItemModelToInventory(_currentGameItem);
         }
 
         private void WeaponsUse(Weapons weapons)
         {
             _player.WeaponsInUse = weapons.Using;
-            _player.RemoveGameItemFromInventory(_currentGameItem);
+            _player.RemoveGameItemModelToInventory(_currentGameItem);
         }
+        #endregion
+
+        #region GameTime
+
+        private TimeSpan GameTime()
+        {
+            return DateTime.Now - _gameStartTime;
+        }
+        public void GameTimer()
+        {
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(1000);
+            timer.Tick += OnGameTimerTick;
+            timer.Start();
+        }
+        void OnGameTimerTick(object sender, EventArgs e)
+        {
+            _gameTime = DateTime.Now - _gameStartTime;
+            MissionTimeDisplay = "Mission Time " + _gameTime.ToString(@"hh\:mm\:ss");
+        }
+
         #endregion
 
         public void OnPlayerTalk() 
@@ -301,10 +340,7 @@ namespace Lightsaber_Builder_Game.Presentation
                 CurrentLocationInformation = speakingNPC.Speak();
             }
         }
-        private TimeSpan GameTime()
-        {
-            return DateTime.Now - _gameStartTime;
-        }
+
         #endregion
 
         #region EVENTS

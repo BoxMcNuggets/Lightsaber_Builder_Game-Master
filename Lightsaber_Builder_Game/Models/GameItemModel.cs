@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lightsaber_Builder_Game.Models
 {
-    public class GameItemModel : ObservableObject
+    public abstract class GameItemModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -29,9 +29,6 @@ namespace Lightsaber_Builder_Game.Models
             Description = description;
             UseMessage = useMessage;
         }
-        public virtual string InformationString()
-        {
-            return $"{Name}: {Description}/nValue: {Value}";
-        }
+        public abstract string InformationString();
     }
 }

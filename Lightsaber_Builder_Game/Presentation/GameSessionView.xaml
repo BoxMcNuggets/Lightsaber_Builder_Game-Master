@@ -83,7 +83,8 @@
                         Text="{Binding CurrentLocation.Name}"
                         Width="150"
                         Height="40"
-                        FontSize="25"/>
+                        FontSize="25"
+                        IsReadOnly="True"/>
                 </StackPanel>
                 <Border
                     Grid.Column="0"
@@ -120,13 +121,18 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn 
                                 Header="Name"
-                                FontSize="20"
-                                Binding="{Binding Name, Mode=OneWay}"
-                                Width="4*"/>
+                                FontSize="15"
+                                Binding="{Binding GameItemModel.Name, Mode=OneWay}"
+                                Width="3*"/>
+                            <DataGridTextColumn 
+                                Header="Qty"
+                                FontSize="15"
+                                Binding="{Binding Quantity, Mode=OneWay}"
+                                Width="*"/>
                             <DataGridTextColumn 
                                 Header="Value"
-                                FontSize="20"
-                                Binding="{Binding Value, Mode=OneWay}"
+                                FontSize="15"
+                                Binding="{Binding GameItemModel.Value, Mode=OneWay}"
                                 Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
@@ -199,7 +205,7 @@
                             <DataGridTextColumn 
                                 Header="Items"
                                 IsReadOnly="True"                 
-                                Binding="{Binding Information, Mode=OneWay}"
+                                Binding="{Binding GameItemModel.Information, Mode=OneWay}"
                                 Width="*">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style>
@@ -207,6 +213,11 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
+                            <DataGridTextColumn 
+                                Header="Qty"
+                                IsReadOnly="True"
+                                Width="75"
+                                Binding="{Binding Quantity, Mode=OneWay}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel
@@ -295,17 +306,25 @@
                         Width="150"
                         Height="40"
                         FontSize="20">
-                        <TextBox
-                        Name="CurrentQuestTextBox"
-                        Height="auto"
-                        Width="auto"
-                        Margin="10"
-                        Background="Gray"
-                        BorderThickness="0"
-                        TextWrapping="Wrap"
-                        Text="{Binding MessageDisplayQuestObjectives, Mode=OneWay}"
-                        VerticalScrollBarVisibility="Auto"
-                        VerticalContentAlignment="top"/>
+                        <StackPanel>
+                            <TextBox
+                                Name="CurrentQuestTextBox"
+                                Height="175"
+                                Width="auto"
+                                Margin="10"
+                                Background="Gray"
+                                BorderThickness="0"
+                                TextWrapping="Wrap"
+                                Text="{Binding MessageDisplayQuestObjectives, Mode=OneWay}"
+                                VerticalScrollBarVisibility="Auto"
+                                VerticalContentAlignment="top"/>
+                            <Button
+                                Content="Enter Lair"
+                                Margin="0,0,0,0"
+                                Style="{StaticResource ButtonGameSessionStyle}"
+                                Click="EnterLair_Click"/>
+                        </StackPanel>
+
                     </TabItem>
                     <TabItem
                         Header="Quests"
@@ -318,11 +337,39 @@
                             Height="250"
                             VerticalAlignment="Top"
                             Background="LightGray"
-                            ItemsSource="{Binding CurrentLocation.GameItems}" 
-                            SelectedItem="{Binding CurrentGameItem}"
+                            ItemsSource="{Binding CurrentLocation.Mission}" 
+                            SelectedItem="{Binding Missions}"
                             AutoGenerateColumns="False"
                             HeadersVisibility="Column">
-                            
+                            <DataGrid.Columns>
+                                <DataGridTextColumn 
+                                    Header="Quests"
+                                    IsReadOnly="True"                 
+                                    Binding="{Binding Name, Mode=OneWay}"
+                                    Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn 
+                                        Header="Status"
+                                        IsReadOnly="True"
+                                        Width="150"
+                                        Binding="{Binding Status, Mode=OneWay}"/>
+                                <DataGridTextColumn 
+                                        Header="Details" 
+                                        IsReadOnly="True"                 
+                                        Binding="{Binding StatusDetail, Mode=OneWay}"
+                                        Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>
                 </TabControl>
@@ -413,6 +460,7 @@
                             Height="40"
                             Width="150"
                             FontSize="25"
+                            IsReadOnly="True"
                             Text="{Binding Player.Race}"/>
                     </StackPanel>
                     <StackPanel
@@ -426,6 +474,7 @@
                             Height="40"
                             Width="150"
                             FontSize="25"
+                            IsReadOnly="True"
                             Text="{Binding Player.JobTitle}"/>
                     </StackPanel>
                 </StackPanel>                
@@ -454,6 +503,7 @@
                             Height="40"
                             Width="150"
                             FontSize="25"
+                            IsReadOnly="True"
                             Text="{Binding Player.WeaponsInUse}"/>
                     </StackPanel>
                     <StackPanel
@@ -467,6 +517,7 @@
                             Height="40"
                             Width="150"
                             FontSize="25"
+                            IsReadOnly="True"
                             Text="{Binding Player.Health}"/>
                     </StackPanel>
                     <StackPanel
@@ -480,10 +531,16 @@
                             Height="40"
                             Width="150"
                             FontSize="25"
+                            IsReadOnly="True"
                             Text="{Binding Player.Lives}"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
+            <Label 
+                Grid.Row="2"
+                Content="{Binding MissionTimeDisplay}" 
+                HorizontalAlignment="Center"
+                Style="{StaticResource GameSessionLabelStyle}"/>
             <Button
                 Grid.Column="2"
                 Grid.Row="2"
