@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace Lightsaber_Builder_Game.Models
 {
@@ -30,6 +31,7 @@ namespace Lightsaber_Builder_Game.Models
         private ObservableCollection<GameItemModelQuantity> _weapons;
         private ObservableCollection<GameItemModelQuantity> _lightSaberParts;
         private ObservableCollection<GameItemModelQuantity> _kyberCrystals;
+        private ObservableCollection<Mission> _missions;
 
         #endregion
 
@@ -131,8 +133,6 @@ namespace Lightsaber_Builder_Game.Models
             get { return _kyberCrystals; }
             set { _kyberCrystals = value; }
         }
-        private ObservableCollection<Mission> _missions;
-
         public ObservableCollection<Mission> Mission
         {
             get { return _missions; }
@@ -161,23 +161,30 @@ namespace Lightsaber_Builder_Game.Models
 
         #region Missions
 
-        //public void UpdateMissionStatus() 
-        //{
-        //    foreach (Mission mission in _missions.Where(m => m.Status == Models.Mission.MissionStatus.Incomplete))
-        //    {
-        //        if (mission is MissionLightsaberParts)
-        //        {
-        //            if (((MissionLightsaberParts)mission).GameItemModelQuantityMissionToDo(_inventory.ToList()).Count == 0)
-        //            {
-        //                mission.Status = Mission.MissionStatus.Complete;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            throw new Exception("Unknown Mission Child Class");
-        //        }
-        //    }
-        //}
+        public void UpdateMissionStatus()
+        {
+            foreach (Mission mission in _missions.Where(m => m.Status == Models.Mission.MissionStatus.Incomplete))
+            {
+                if (mission is MissionLightsaberParts)
+                {
+                    if (((MissionLightsaberParts)mission).GameItemModelQuantityMissionToDo(_inventory.ToList()).Count == 0)
+                    {
+                        mission.Status = Models.Mission.MissionStatus.Complete;
+                    }
+                }
+                else if (mission is MissionBattleEnemys)
+                {
+                    if (((MissionBattleEnemys)mission).NPCSNotDefeated(_npcsDefeated).Count == 0)
+                    {
+                        mission.Status = Models.Mission.MissionStatus.Complete;
+                    }
+                }
+                else
+                {
+                    throw new Exception("Unknown Mission Child Class");
+                }
+            }
+        }
 
         #endregion
 
@@ -235,6 +242,21 @@ namespace Lightsaber_Builder_Game.Models
                 }
             }
             UpdateInventoryCategories();
+        }
+        public void AddQuestsToQuests(Mission missions) 
+        {
+            Mission missionsAdd = _missions.FirstOrDefault(m => m.Id == missions.Id);
+            if (missionsAdd == null)
+            {
+                Mission newMissions = new Mission();
+                newMissions.Id = missions.Id;
+
+                _missions.Add(newMissions);
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show("Error: You already have the missions");
+            }
         }
 
         #endregion

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Lightsaber_Builder_Game.Models;
+using Lightsaber_Builder_Game.DataLayer;
 
 namespace Lightsaber_Builder_Game.Presentation
 {
@@ -15,6 +16,13 @@ namespace Lightsaber_Builder_Game.Presentation
         #region ENUMS
 
 
+
+        #endregion
+
+        #region CONSTANTS
+
+        const string TAB = "\t";
+        const string NEW_LINE = "\n";
 
         #endregion
 
@@ -133,9 +141,7 @@ namespace Lightsaber_Builder_Game.Presentation
 
         }
 
-        public GameSessionViewModel(
-            Player player,
-            Map gamemap)
+        public GameSessionViewModel(Player player, Map gamemap)
         {
             _player = player;
             _gamemap = gamemap;
@@ -157,6 +163,7 @@ namespace Lightsaber_Builder_Game.Presentation
             UpdateAccessibleLocations();
             _currentLocationInformation = CurrentLocation.Description;
             _player.UpdateInventoryCategories();
+            InitializeMissionBattleViewModel();
         }
 
         #region Add Item To Inventory
@@ -170,9 +177,11 @@ namespace Lightsaber_Builder_Game.Presentation
                 {
                     case LightSaberParts lightSaber:
                         AddLightsaberProgress(lightSaber, selectedGameItemModelQuantity);
+                        _player.UpdateMissionStatus();
                         break;
                     case KyberCrystals kybercrystal:
                         AddLightsaberCrystalProgress(kybercrystal, selectedGameItemModelQuantity);
+                        _player.UpdateMissionStatus();
                         break;
                     default:
                         _currentLocation.RemoveGameItemModelFromLocation(selectedGameItemModelQuantity);
@@ -181,33 +190,6 @@ namespace Lightsaber_Builder_Game.Presentation
                 }
             }
         }
-
-        #endregion
-
-        #region Remove Item From Inventory
-        public void RemoveItemFromInventory()
-        {
-            if (_currentGameItem != null)
-            {
-                GameItemModelQuantity selectedGameItemQuantity = _currentGameItem as GameItemModelQuantity;
-
-                switch (_currentGameItem.GameItemModel)
-                {
-                    case LightSaberParts lightSaber:
-                        RemoveLightsaberPercent(lightSaber);
-                        break;
-                    case KyberCrystals kybercrystal:
-                        RemoveLightsaberCrystalProgress(kybercrystal);
-                        break;
-                    default:
-                        _currentLocation.AddGameItemModelToLocation(selectedGameItemQuantity);
-                        _player.RemoveGameItemModelToInventory(selectedGameItemQuantity);
-                        break;
-                }
-
-            }
-        }
-
         private void AddLightsaberCrystalProgress(KyberCrystals kybercrystal, GameItemModelQuantity selectedGameItemModelQuantity)
         {
             if (_player.LightsaberProgress == 85)
@@ -231,13 +213,46 @@ namespace Lightsaber_Builder_Game.Presentation
             _currentLocation.RemoveGameItemModelFromLocation(selectedGameItemModelQuantity);
             _player.AddGameItemModelToInventory(selectedGameItemModelQuantity);
         }
-        private void RemoveLightsaberCrystalProgress(KyberCrystals kybercrystal)
+
+        #endregion
+
+        #region Remove Item From Inventory
+        public void RemoveItemFromInventory()
+        {
+            if (_currentGameItem != null)
+            {
+                GameItemModelQuantity selectedGameItemModelQuantity = _currentGameItem as GameItemModelQuantity;
+
+                switch (_currentGameItem.GameItemModel)
+                {
+                    case LightSaberParts lightSaber:
+                        RemoveLightsaberPercent(lightSaber, selectedGameItemModelQuantity);
+                        _player.UpdateMissionStatus();
+                        break;
+                    case KyberCrystals kybercrystal:
+                        RemoveLightsaberCrystalProgress(kybercrystal, selectedGameItemModelQuantity);
+                        _player.UpdateMissionStatus();
+                        break;
+                    default:
+                        _currentLocation.AddGameItemModelToLocation(selectedGameItemModelQuantity);
+                        _player.RemoveGameItemModelToInventory(selectedGameItemModelQuantity);
+                        break;
+                }
+
+            }
+        }
+
+        private void RemoveLightsaberCrystalProgress(KyberCrystals kybercrystal, GameItemModelQuantity selectedGameItemModelQuantity)
         {
             _player.LightsaberProgress -= kybercrystal.LightsaberProgress;
+            _currentLocation.AddGameItemModelToLocation(selectedGameItemModelQuantity);
+            _player.RemoveGameItemModelToInventory(selectedGameItemModelQuantity);
         }
-        private void RemoveLightsaberPercent(LightSaberParts lightSaber)
+        private void RemoveLightsaberPercent(LightSaberParts lightSaber, GameItemModelQuantity selectedGameItemModelQuantity)
         {
             _player.LightsaberProgress -= lightSaber.LightsaberProgress;
+            _currentLocation.AddGameItemModelToLocation(selectedGameItemModelQuantity);
+            _player.RemoveGameItemModelToInventory(selectedGameItemModelQuantity);
         }
         #endregion
 
@@ -338,6 +353,138 @@ namespace Lightsaber_Builder_Game.Presentation
             {
                 ISpeak speakingNPC = CurrentNPC as ISpeak;
                 CurrentLocationInformation = speakingNPC.Speak();
+                _player.UpdateMissionStatus();
+                _player.NPCSDefeated.Add(_currentNPC);
+                if (CurrentNPC.Name == "Emperor Palpatine")
+                {
+                    if (MessageBox.Show("Do you want to accept the quests?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        
+                    }
+                    else
+                    {
+                        // Do Nothing
+                    }
+                }
+                else if (CurrentNPC.Name == "Obi-Wan Kenobi")
+                {
+                    if (MessageBox.Show("Do you want to accept the quests?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        
+                    }
+                    else
+                    {
+                        // Do Nothing
+                    }
+                }
+            }
+        }
+        private string GenerateMissionDefeatDetail(MissionBattleEnemys mission) 
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Clear();
+
+            sb.AppendLine("All Enemies");
+            foreach (var location in mission.RequiredNPCS)
+            {
+                sb.AppendLine(TAB + location.Name);
+            }
+            if (mission.Status == Mission.MissionStatus.Incomplete)
+            {
+                sb.AppendLine("NPCs to defeat");
+                foreach (var location in mission.NPCSNotDefeated(_player.NPCSDefeated))
+                {
+                    sb.AppendLine(TAB + location.Name);
+                }
+            }
+            sb.Remove(sb.Length - 2, 2);
+
+            return sb.ToString();
+        }
+        private string GenerateMissionLightsaberDetail(MissionLightsaberParts mission) 
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Clear();
+
+            sb.AppendLine("All Required Lightsaber Parts");
+            foreach (var gameItemModelQuantity in mission.RequiredgameItemModelQuantities)
+            {
+                sb.Append(TAB + gameItemModelQuantity.GameItemModel.Name);
+                sb.AppendLine($" ( {gameItemModelQuantity.Quantity} ) ");
+            }
+            if (mission.Status == Mission.MissionStatus.Incomplete)
+            {
+                sb.AppendLine("Lightsaber Parts To Gather");
+                foreach (var gameItemModelQuantity in mission.GameItemModelQuantityMissionToDo(_player.Inventory.ToList()))
+                {
+                    int quantityInInventory = 0;
+                    GameItemModelQuantity gameItemModelQuantityGathered = _player.Inventory.FirstOrDefault(gi => gi.GameItemModel.Id == gameItemModelQuantity.GameItemModel.Id);
+                    if (gameItemModelQuantityGathered != null)
+                    {
+                        quantityInInventory = gameItemModelQuantityGathered.Quantity;
+                    }
+                    sb.Append(TAB + gameItemModelQuantity.GameItemModel.Name);
+                    sb.AppendLine($" ( {gameItemModelQuantity.Quantity - quantityInInventory} ) ");
+                }
+            }
+            sb.Remove(sb.Length - 2, 2);
+
+            return sb.ToString();
+        }
+        private string GenerateMissionStatusInfo() 
+        {
+            string missionStatusInformation;
+
+            double totalMissions = _player.Mission.Count();
+            double missionCompleted = _player.Mission.Where(m => m.Status == Mission.MissionStatus.Complete).Count();
+
+            int percentMissionsComplete = (int)((missionCompleted / totalMissions) * 100);
+            missionStatusInformation = $"Missions Complete: {percentMissionsComplete}%" + NEW_LINE;
+
+            if (percentMissionsComplete == 0)
+            {
+                missionStatusInformation += "No missions complete";
+            }
+            else if (percentMissionsComplete <= 50)
+            {
+                missionStatusInformation += "You are half way there";
+            }
+            else if (percentMissionsComplete == 100)
+            {
+                missionStatusInformation += "Congratulations, you have completed all missions";
+            }
+
+            return missionStatusInformation;
+        }
+        private MissionStatusViewModel InitializeMissionBattleViewModel()
+        {
+            MissionStatusViewModel missionStatusViewModel = new MissionStatusViewModel();
+
+            missionStatusViewModel.MissionInformation = GenerateMissionStatusInfo();
+
+            missionStatusViewModel.Missions = new List<Mission>(_player.Mission);
+            foreach (Mission mission in missionStatusViewModel.Missions)
+            {
+                if (mission is MissionBattleEnemys)
+                    mission.StatusDetail = GenerateMissionDefeatDetail((MissionBattleEnemys)mission);
+
+                if (mission is MissionLightsaberParts)
+                    mission.StatusDetail = GenerateMissionLightsaberDetail((MissionLightsaberParts)mission);
+            }
+
+            return missionStatusViewModel;
+        }
+        public void OpenMissionBattleView() 
+        {
+            if (_currentNPC.Id == 106 || _currentNPC.Id == 108 || _currentNPC.Id == 101 || _currentNPC.Id == 109)
+            {
+                MissionBattleView missionBattleView = new MissionBattleView(InitializeMissionBattleViewModel());
+
+                missionBattleView.Show();
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show("Error: You Cannot Battle This NPC");
             }
         }
 

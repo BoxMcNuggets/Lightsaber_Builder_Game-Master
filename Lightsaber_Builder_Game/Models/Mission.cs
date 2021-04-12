@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Lightsaber_Builder_Game.Models
 {
-    public class Mission
+    public class Mission : ObservableObject
     {
         #region ENUMS
 
@@ -53,7 +54,11 @@ namespace Lightsaber_Builder_Game.Models
         public string StatusDetail
         {
             get { return _statusDetail; }
-            set { _statusDetail = value; }
+            set 
+            {
+                _statusDetail = value;
+                OnPropertyChanged(nameof(StatusDetail));
+            }
         }
 
         #endregion

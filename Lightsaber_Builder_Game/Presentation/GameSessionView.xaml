@@ -297,8 +297,13 @@
                                     Style="{StaticResource ButtonGameSessionStyle}"
                                     Click="TalkToButton_Click"/>
                                 <Button
-                                    Content="Accept Quest"
+                                    Content="Battle"
                                     Margin="0,10,0,0"
+                                    Style="{StaticResource ButtonGameSessionStyle}"
+                                    Click="BattleQuestButton_Click"/>
+                                <Button
+                                    Content="Accept Quest"
+                                    Margin="50,10,0,0"
                                     Style="{StaticResource ButtonGameSessionStyle}"
                                     Click="AcceptQuestButton_Click"/>
                             </StackPanel>
@@ -318,7 +323,7 @@
                                 Background="Gray"
                                 BorderThickness="0"
                                 TextWrapping="Wrap"
-                                Text="{Binding MessageDisplayQuestObjectives, Mode=OneWay}"
+                                Text="{Binding MissionInformation, Mode=OneWay}"
                                 VerticalScrollBarVisibility="Auto"
                                 VerticalContentAlignment="top"/>
                             <Button
@@ -337,17 +342,17 @@
                         <DataGrid
                             x:Name="QuestDataGrid"
                             FontSize="20"
-                            Height="250"
+                            Height="auto"
                             VerticalAlignment="Top"
                             Background="LightGray"
-                            ItemsSource="{Binding CurrentLocation.Mission}" 
-                            SelectedItem="{Binding Missions}"
+                            ItemsSource="{Binding Player.Mission}" 
+                            SelectedItem="{Binding Mission}"
                             AutoGenerateColumns="False"
                             HeadersVisibility="Column">
                             <DataGrid.Columns>
                                 <DataGridTextColumn 
                                     Header="Quests"
-                                    IsReadOnly="True"                 
+                                    IsReadOnly="True" 
                                     Binding="{Binding Name, Mode=OneWay}"
                                     Width="*">
                                     <DataGridTextColumn.ElementStyle>
@@ -363,7 +368,8 @@
                                         Binding="{Binding Status, Mode=OneWay}"/>
                                 <DataGridTextColumn 
                                         Header="Details" 
-                                        IsReadOnly="True"                 
+                                        IsReadOnly="True"  
+                                        FontSize="10"
                                         Binding="{Binding StatusDetail, Mode=OneWay}"
                                         Width="*">
                                     <DataGridTextColumn.ElementStyle>
@@ -408,8 +414,7 @@
                 Width="300"
                 Margin="10"
                 Name="pbStatus"
-                Background="White"
-                />
+                Background="White"/>
             <TextBlock 
                 Text="{Binding ElementName=pbStatus, Path=Value, StringFormat={}{0:0}%}" 
                 FontSize="25"

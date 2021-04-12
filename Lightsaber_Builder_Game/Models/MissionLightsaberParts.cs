@@ -11,7 +11,14 @@ namespace Lightsaber_Builder_Game.Models
         private int _id;
         private string _name;
         private MissionStatus _status;
-        private List<GameItemModelQuantity> _requiredGameItems;
+        private List<GameItemModelQuantity> _requiredGameItemsModelQuantitys;
+
+        public List<GameItemModelQuantity> RequiredgameItemModelQuantities
+        {
+            get { return _requiredGameItemsModelQuantitys; }
+            set { _requiredGameItemsModelQuantitys = value; }
+        }
+
 
         public MissionLightsaberParts() 
         {
@@ -23,29 +30,30 @@ namespace Lightsaber_Builder_Game.Models
             _id = id;
             _name = name;
             _status = status;
-            _requiredGameItems = requiredGameItems;
+            _requiredGameItemsModelQuantitys = requiredGameItems;
         }
-        //public List<GameItemModelQuantity> GameItemModelQuantityMissionToDo(List<GameItemModelQuantity> inventory)
-        //{
-        //    List<GameItemModelQuantity> gameItemModelQuantityComplete = new List<GameItemModelQuantity>();
+        public List<GameItemModelQuantity> GameItemModelQuantityMissionToDo(List<GameItemModelQuantity> inventory)
+        {
+            List<GameItemModelQuantity> gameItemModelQuantityComplete = new List<GameItemModelQuantity>();
 
-        //    foreach (var missionGameItem in _requiredGameItems)
-        //    {
-        //        GameItemModelQuantity inventoryItemMatch = inventory.FirstOrDefault(gi => gi.GameItemModel.Id == missionGameItem.GameItemModel.Id);
+            foreach (var missionGameItem in _requiredGameItemsModelQuantitys)
+            {
+                GameItemModelQuantity inventoryItemMatch = inventory.FirstOrDefault(gi => gi.GameItemModel.Id == missionGameItem.GameItemModel.Id);
 
-        //        if (inventoryItemMatch == null)
-        //        {
-        //            gameItemModelQuantityComplete.Add(missionGameItem);
-        //        }
-        //        else
-        //        {
-        //            if (inventoryItemMatch.Quantity < missionGameItem.Quantity)
-        //            {
-        //                gameItemModelQuantityComplete.Add(missionGameItem);
-        //            }
-        //        }
-        //    }
-        //}
+                if (inventoryItemMatch == null)
+                {
+                    gameItemModelQuantityComplete.Add(missionGameItem);
+                }
+                else
+                {
+                    if (inventoryItemMatch.Quantity < missionGameItem.Quantity)
+                    {
+                        gameItemModelQuantityComplete.Add(missionGameItem);
+                    }
+                }
+            }
+            return gameItemModelQuantityComplete;
+        }
 
     }
 }

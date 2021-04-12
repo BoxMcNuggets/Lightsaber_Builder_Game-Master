@@ -22,26 +22,27 @@ namespace Lightsaber_Builder_Game.Models
         {
 
         }
-        //public MissionBattleEnemys(int id, string name, MissionStatus status, List<NPCS> requiredNPCS)
-        //    : base(id, name, status) 
-        //{
-        //    _id = id;
-        //    _name = name;
-        //    _status = status;
-        //    _requiredNPCs = requiredNPCS;
-        //}
-        //public List<NPCS> NPCSNotEngaged(List<NPCS> NPCSNotDefeated) 
-        //{
-        //    List<NPCS> nPCSToDefeate = new List<NPCS>();
+        public MissionBattleEnemys(int id, string name, MissionStatus status, List<NPCS> requiredNPCS)
+            : base(id, name, status)
+        {
+            _id = id;
+            _name = name;
+            _status = status;
+            _requiredNPCs = requiredNPCS;
+        }
+        public List<NPCS> NPCSNotDefeated(List<NPCS> NPCSNotDefeated)
+        {
+            List<NPCS> nPCSToDefeate = new List<NPCS>();
 
-        //    foreach (var requiredNPCS in _requiredNPCs)
-        //    {
-        //        if (!NPCSNotEngaged.Any())
-        //        {
-
-        //        }
-        //    }
-        //}
+            foreach (var requiredNPCS in _requiredNPCs)
+            {
+                if (!NPCSNotDefeated.Any(l => l.Id == requiredNPCS.Id))
+                {
+                    nPCSToDefeate.Add(requiredNPCS);
+                }
+            }
+            return nPCSToDefeate;
+        }
 
     }
 }

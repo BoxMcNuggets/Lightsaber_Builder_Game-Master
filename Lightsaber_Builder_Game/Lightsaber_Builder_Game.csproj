@@ -70,15 +70,21 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Presentation\MissionBattleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\GameBusiness.cs" />
     <Compile Include="DataLayer\GameData.cs" />
+    <Compile Include="Models\BattleEnum.cs" />
     <Compile Include="Models\Character.cs" />
     <Compile Include="Models\Credits.cs" />
     <Compile Include="Models\GameItemModel.cs" />
     <Compile Include="Models\GameItemModelQuantity.cs" />
     <Compile Include="Models\HealthItems.cs" />
+    <Compile Include="Models\IBattle.cs" />
     <Compile Include="Models\ISpeak.cs" />
     <Compile Include="Models\KyberCrystals.cs" />
     <Compile Include="Models\LightSaberParts.cs" />
@@ -99,6 +105,10 @@
     <Compile Include="Presentation\GameSetupView.xaml.cs">
       <DependentUpon>GameSetupView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\MissionBattleView.xaml.cs">
+      <DependentUpon>MissionBattleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\MissionStatusViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

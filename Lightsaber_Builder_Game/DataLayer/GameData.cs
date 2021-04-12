@@ -37,6 +37,11 @@ namespace Lightsaber_Builder_Game.DataLayer
                 Inventory = new ObservableCollection<GameItemModelQuantity>()
                 {
 
+                },
+                Mission = new ObservableCollection<Mission>() 
+                {
+                    MissionById(1),
+                    MissionById(2)
                 }
             };
         }
@@ -223,7 +228,8 @@ namespace Lightsaber_Builder_Game.DataLayer
                     },
                     NPCs = new ObservableCollection<NPCS>
                     {
-                        NPCById(103)
+                        NPCById(103),
+                        NPCById(106)
                     }
                 }
                 );
@@ -371,11 +377,65 @@ namespace Lightsaber_Builder_Game.DataLayer
                         "Welcome to Mustafar",
                         "The Jedi are extinct. Their fire has gone out of the universe. You, my friend, are all that's left of their religion."
                     }
+                },
+                new NPCSpeak()
+                {
+                    Id = 109,
+                    Name = "Wampa",
+                    Race = Character.RaceType.Unknown,
+                    Description = "An Ice Beast found on Hoth that can be very deadly to anyone.",
+                    Messages = new List<string>()
+                    {
+                        "You hear a crunch as the wampa bites on the leg of a tauntaun",
+                        "Rarrrrrr"
+                    }
                 }
             };
         }
 
         #endregion
 
+        #region Missions
+        private static Mission MissionById(int Id) 
+        {
+            return Missions().FirstOrDefault(m => m.Id == Id);
+        }
+
+        public static List<Mission> Missions() 
+        {
+            return new List<Mission>()
+            {
+                new MissionLightsaberParts()
+                {
+                    Id = 1,
+                    Name = "Lightsaber",
+                    Description = "Collect all the Lightsaber Parts",
+                    Status = Mission.MissionStatus.Incomplete,
+                    RequiredgameItemModelQuantities = new List<GameItemModelQuantity>()
+                    {
+                        new GameItemModelQuantity(GameItemModelById(30), 1),
+                        new GameItemModelQuantity(GameItemModelById(31), 1),
+                        new GameItemModelQuantity(GameItemModelById(32), 1),
+                        new GameItemModelQuantity(GameItemModelById(33), 1),
+                        new GameItemModelQuantity(GameItemModelById(34), 1)
+                    }
+                },
+                new MissionBattleEnemys()
+                {
+                    Id = 2,
+                    Name = "Battle",
+                    Description = "Battle all the enemys to get the lightsaber parts",
+                    Status = Mission.MissionStatus.Incomplete,
+                    RequiredNPCS = new List<NPCS>()
+                    {
+                        NPCById(106),
+                        NPCById(108),
+                        NPCById(101),
+                        NPCById(109)
+                    }
+                }
+            };
+        }
+        #endregion
     }
 }
