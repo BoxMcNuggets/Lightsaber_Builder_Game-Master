@@ -22,6 +22,7 @@ namespace Lightsaber_Builder_Game.Models
             : base(id, name, race, description) 
         {
             Messages = messages;
+
         }
         public string Speak() 
         {

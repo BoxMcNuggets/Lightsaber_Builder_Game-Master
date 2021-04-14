@@ -79,7 +79,7 @@ namespace Lightsaber_Builder_Game.Presentation
         }
         private void BattleQuestButton_Click(object sender, RoutedEventArgs e)
         {
-            _gameSessionViewModel.OpenMissionBattleView();
+            _gameSessionViewModel.OnPlayerAttack();
         }
 
         #endregion

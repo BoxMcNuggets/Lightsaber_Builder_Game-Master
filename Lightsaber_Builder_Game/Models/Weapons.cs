@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lightsaber_Builder_Game.Models
 {
-    class Weapons : GameItemModel
+    public class Weapons : GameItemModel
     {
         public int MinimumDamage { get; set; }
         public int MaximumDamage { get; set; }

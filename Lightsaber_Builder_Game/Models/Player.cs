@@ -8,11 +8,14 @@ using System.Windows;
 
 namespace Lightsaber_Builder_Game.Models
 {
-    public class Player : Character
+    public class Player : Character, IBattle
     {
         #region ENUMS
 
         public enum ForceSide { LightSide, DarkSide }
+
+        private const int DEFENDER_DAMAGE_ADJUSTMENT = 5;
+        private const int MAXIMUM_RETREAT_DAMAGE = 10;
 
         #endregion
 
@@ -21,6 +24,8 @@ namespace Lightsaber_Builder_Game.Models
         private int _lightsaberProgress;
         private int _lives;
         private int _health;
+        private Weapons _currentGameItemWeapon;
+        private BattleEnum _battleEnum;
         private string _weaponsInUse;
         private ForceSide _forceSide;
         private List<Location> _locationsVisited;
@@ -32,6 +37,7 @@ namespace Lightsaber_Builder_Game.Models
         private ObservableCollection<GameItemModelQuantity> _lightSaberParts;
         private ObservableCollection<GameItemModelQuantity> _kyberCrystals;
         private ObservableCollection<Mission> _missions;
+        private BattleEnum _battleMode;
 
         #endregion
 
@@ -92,6 +98,17 @@ namespace Lightsaber_Builder_Game.Models
                 OnPropertyChanged(nameof(Health));
             }
         }
+        public Weapons CurrentGameItemWeapon
+        {
+            get { return _currentGameItemWeapon; }
+            set { _currentGameItemWeapon = value; }
+        }
+        public BattleEnum BattleEnumName
+        {
+            get { return _battleEnum; }
+            set { _battleEnum = value; }
+        }
+
         public List<Location> LocationsVisited
         {
             get { return _locationsVisited; }
@@ -138,7 +155,11 @@ namespace Lightsaber_Builder_Game.Models
             get { return _missions; }
             set { _missions = value; }
         }
-
+        public BattleEnum BattleMode
+        {
+            get { return _battleMode; }
+            set { _battleMode = value; }
+        }
 
         #endregion
 
@@ -260,6 +281,33 @@ namespace Lightsaber_Builder_Game.Models
         }
 
         #endregion
+
+        public int Attack()
+        {
+            int hitPoints = random.Next(CurrentGameItemWeapon.MinimumDamage, CurrentGameItemWeapon.MaximumDamage);
+
+            if (hitPoints <= 100)
+            {
+                return hitPoints;
+            }
+            else
+            {
+                return 100;
+            }
+        }
+        public int Retreat()
+        {
+            int hitPoints = MAXIMUM_RETREAT_DAMAGE;
+
+            if (hitPoints <= 100)
+            {
+                return hitPoints;
+            }
+            else
+            {
+                return 100;
+            }
+        }
 
         public override string DefaultGreeting()
         {

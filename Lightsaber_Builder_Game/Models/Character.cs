@@ -28,9 +28,12 @@ namespace Lightsaber_Builder_Game.Models
 
         protected int _id;
         protected string _name;
+        private int _health;
         protected int _locationId;
         protected int _age;
         protected RaceType _race;
+
+        protected Random random = new Random();
 
         #endregion
 
@@ -54,6 +57,16 @@ namespace Lightsaber_Builder_Game.Models
                 OnPropertyChanged(nameof(Name));
             }
         }
+        public int Health
+        {
+            get { return _health; }
+            set 
+            { 
+                _health = value;
+                OnPropertyChanged(nameof(Health));
+            }
+        }
+
         public int LocationId
         {
             get { return _locationId; }

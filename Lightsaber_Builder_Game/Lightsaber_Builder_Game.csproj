@@ -70,10 +70,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Presentation\MissionBattleView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\GameBusiness.cs" />
@@ -93,6 +89,7 @@
     <Compile Include="Models\Mission.cs" />
     <Compile Include="Models\MissionBattleEnemys.cs" />
     <Compile Include="Models\MissionLightsaberParts.cs" />
+    <Compile Include="Models\NPCBattle.cs" />
     <Compile Include="Models\NPCS.cs" />
     <Compile Include="Models\NPCSpeak.cs" />
     <Compile Include="Models\Player.cs" />
@@ -104,9 +101,6 @@
     <Compile Include="Presentation\GameSessionViewModel.cs" />
     <Compile Include="Presentation\GameSetupView.xaml.cs">
       <DependentUpon>GameSetupView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Presentation\MissionBattleView.xaml.cs">
-      <DependentUpon>MissionBattleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentation\MissionStatusViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

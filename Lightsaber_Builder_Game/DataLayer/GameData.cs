@@ -33,16 +33,18 @@ namespace Lightsaber_Builder_Game.DataLayer
                 JobTitle = Player.ForceSide.LightSide,
                 Race = Character.RaceType.Human,
                 Health = 100,
-                Lives = 3,
+                Lives = 2,
                 Inventory = new ObservableCollection<GameItemModelQuantity>()
                 {
 
                 },
-                Mission = new ObservableCollection<Mission>() 
+                Mission = new ObservableCollection<Mission>()
                 {
                     MissionById(1),
                     MissionById(2)
-                }
+                },
+                CurrentGameItemWeapon = GameItemModelById(44) as Weapons
+                
             };
         }
         #region Create GameMap
@@ -67,7 +69,8 @@ namespace Lightsaber_Builder_Game.DataLayer
                 {
                     new GameItemModelQuantity(GameItemModelById(40), 1),
                     new GameItemModelQuantity(GameItemModelById(10), 1),
-                    new GameItemModelQuantity(GameItemModelById(11), 1)
+                    new GameItemModelQuantity(GameItemModelById(11), 1),
+                    new GameItemModelQuantity(GameItemModelById(12), 1)
                 }
             }
             );
@@ -149,7 +152,8 @@ namespace Lightsaber_Builder_Game.DataLayer
                     },
                     NPCs = new ObservableCollection<NPCS>
                     {
-                        NPCById(105)
+                        NPCById(105),
+                        NPCById(109)
                     }
                 }
                 );
@@ -173,7 +177,8 @@ namespace Lightsaber_Builder_Game.DataLayer
                     {
                         new GameItemModelQuantity(GameItemModelById(32), 1),
                         new GameItemModelQuantity(GameItemModelById(21), 1),
-                        new GameItemModelQuantity(GameItemModelById(52), 1)
+                        new GameItemModelQuantity(GameItemModelById(52), 1),
+                        new GameItemModelQuantity(GameItemModelById(12), 1)
                     },
                     NPCs = new ObservableCollection<NPCS>
                     {
@@ -253,6 +258,7 @@ namespace Lightsaber_Builder_Game.DataLayer
             {
                 new HealthItems(10, "Milk", 1, 15, 0, "Blue milk from the bantha cow"),
                 new HealthItems(11, "Wookie Cookie", 3, 10, 0, "A flat, round piece of wookiefood that is also edible by other species"),
+                new HealthItems(12, "Health Pack", 1, 0, 1, "A health pack, when used it gives you an extra life"),
                 new Credits(20, "Galactic Credit", 300, Credits.Currency.Credits, "Most commonly used Currency throughout the galaxy"),
                 new Credits(21, "Coaxium", 200, Credits.Currency.Coaxium, "A Currency used by smugglers"),
                 new Credits(22, "Mandalorian Credits", 100, Credits.Currency.MandalorianCredits, "Ancient currency once used only on Mandalor"),
@@ -261,8 +267,11 @@ namespace Lightsaber_Builder_Game.DataLayer
                 new LightSaberParts(32, "LIGHTSABER: Controls", 1, LightSaberParts.LightsaberPart.Controls, "The controls to the lightsaber that allow you to control it", 17),
                 new LightSaberParts(33, "LIGHTSABER: Hand Grip", 1, LightSaberParts.LightsaberPart.HandGrip, "The lower part of the lightsaber that you hold on to", 17),
                 new LightSaberParts(34, "LIGHTSABER: Energy Core", 1, LightSaberParts.LightsaberPart.EnergyCore, "Part of a lightsaber that harnesses the energy and creates the lazer sword part", 17),
-                new Weapons(40, "Blaster", 500, 100, 400, "A blaster where if used correctly, can be deadly", "Blaster"),
-                new Weapons(41, "Lightsaber", 1000000, 100, 10000, "The lightsaber is a great weapon that can cut through most things in the universe", "Lightsaber"),
+                new Weapons(40, "Blaster", 1, 15, 75, "A blaster where if used correctly, can be deadly", "Blaster"),
+                new Weapons(41, "Lightsaber", 10, 75, 200, "The lightsaber is a great weapon that can cut through most things in the universe", "Lightsaber"),
+                new Weapons(42, "Tazer", 1, 10, 20, "A metal rod that a droid can use to defend itself", "Tazer"),
+                new Weapons(43, "Claws", 1, 25, 75, "The claws of a wampa which are very pointy and sharp", "Claws"),
+                new Weapons(44, "Fists", 1, 0, 5, "Your hands", "Fists"),
                 new KyberCrystals(50, "Blue Kyber Crystal", 1, KyberCrystals.KyberCrystal.Blue, "The part of the lightsaber which gives it color", 15),
                 new KyberCrystals(51, "Green Kyber Crystal", 1, KyberCrystals.KyberCrystal.Green, "The part of the lightsaber which gives it color", 15),
                 new KyberCrystals(52, "Red Kyber Crystal", 1, KyberCrystals.KyberCrystal.Red, "The part of the lightsaber which gives it color", 15),
@@ -282,22 +291,25 @@ namespace Lightsaber_Builder_Game.DataLayer
         {
             return new List<NPCS>()
             {
-                new NPCSpeak()
+                new NPCBattle()
                 {
                     Id = 101,
                     Name = "Darth Vader",
+                    Health = 100,
                     Race = Character.RaceType.Human, 
                     Description = "Once a jedi, Darth Vader is now just a black mechanical suit which strikes fear throughout the universe.", 
                     Messages = new List<string>()
                     {
                         "I am altering the deal. Pray I don’t alter it any further.",
                         "Be careful not to choke on your aspirations."
-                    }
+                    },
+                    CurrentGameItemWeapon = GameItemModelById(41) as Weapons
                 },
                 new NPCSpeak()
                 {
                     Id = 102,
                     Name = "Obi-Wan Kenobi",
+                    Health = 100,
                     Race = Character.RaceType.Human,
                     Description = "A legendary Jedi Master, Obi-Wan Kenobi was a noble man and gifted in the ways of the Force.",
                     Messages = new List<string>()
@@ -310,6 +322,7 @@ namespace Lightsaber_Builder_Game.DataLayer
                 {
                     Id = 103,
                     Name = "Duchess Satine Kryze",
+                    Health = 100,
                     Race = Character.RaceType.Human,
                     Description = "The leader of Mandalore during the Clone Wars, Duchess Satine of Kalevala was a controversial figure. She longed to move Mandalore beyond its violent past and instituted a government that valued pacifism.",
                     Messages = new List<string>()
@@ -322,6 +335,7 @@ namespace Lightsaber_Builder_Game.DataLayer
                 {
                     Id = 104,
                     Name = "Yoda",
+                    Health = 100,
                     Race = Character.RaceType.Unknown,
                     Description = "Yoda was a legendary Jedi Master and stronger than most in his connection with the Force. Small in size but wise and powerful.",
                     Messages = new List<string>()
@@ -334,6 +348,7 @@ namespace Lightsaber_Builder_Game.DataLayer
                 {
                     Id = 105,
                     Name = "Princess Leia",
+                    Health = 100,
                     Race = Character.RaceType.Human,
                     Description = "Princess Leia Organa was one of the Rebel Alliance's greatest leaders, fearless on the battlefield and dedicated to ending the tyranny of the Empire",
                     Messages = new List<string>()
@@ -342,22 +357,25 @@ namespace Lightsaber_Builder_Game.DataLayer
                         "You Came In That Thing? You're Braver Than I Thought!"
                     }
                 },
-                new NPCSpeak()
+                new NPCBattle()
                 {
                     Id = 106,
                     Name = "Droid",
+                    Health = 25,
                     Race = Character.RaceType.Droid,
                     Description = "A common R2 unit used by most people in the universe.",
                     Messages = new List<string>()
                     {
                         "The droid makes beeping noises as you look at it.",
                         "The droid makes sad beeping noises as you make a gesture towards it."
-                    }
+                    },
+                    CurrentGameItemWeapon = GameItemModelById(42) as Weapons
                 },
                 new NPCSpeak()
                 {
                     Id = 107,
                     Name = "Emperor Palpatine",
+                    Health = 100,
                     Race = Character.RaceType.Human,
                     Description = "Scheming, powerful, and evil to the core, Darth Sidious restored the Sith and destroyed the Jedi Order",
                     Messages = new List<string>()
@@ -366,29 +384,33 @@ namespace Lightsaber_Builder_Game.DataLayer
                         "Everything That Has Transpired Has Done So According To My Design."
                     }
                 },
-                new NPCSpeak()
+                new NPCBattle()
                 {
                     Id = 108,
                     Name = "Wilhuff Tarken",
+                    Health = 100,
                     Race = Character.RaceType.Human,
                     Description = "An ambitious, ruthless proponent of military power, Wilhuff Tarkin became a favorite of Supreme Chancellor Palpatine and rose rapidly through the Imperial ranks.",
                     Messages = new List<string>()
                     {
                         "Welcome to Mustafar",
                         "The Jedi are extinct. Their fire has gone out of the universe. You, my friend, are all that's left of their religion."
-                    }
+                    },
+                    CurrentGameItemWeapon = GameItemModelById(40) as Weapons
                 },
-                new NPCSpeak()
+                new NPCBattle()
                 {
                     Id = 109,
                     Name = "Wampa",
+                    Health = 100,
                     Race = Character.RaceType.Unknown,
                     Description = "An Ice Beast found on Hoth that can be very deadly to anyone.",
                     Messages = new List<string>()
                     {
                         "You hear a crunch as the wampa bites on the leg of a tauntaun",
                         "Rarrrrrr"
-                    }
+                    },
+                    CurrentGameItemWeapon = GameItemModelById(43) as Weapons
                 }
             };
         }

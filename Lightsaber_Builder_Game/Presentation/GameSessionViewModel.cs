@@ -39,6 +39,7 @@ namespace Lightsaber_Builder_Game.Presentation
         private GameItemModelQuantity _currentGameItem;
         private string _currentLocationInformation;
         private NPCS _currentNPC;
+        private GameItemModelQuantity _currentGameItemWeapon;
 
         #endregion
 
@@ -131,6 +132,20 @@ namespace Lightsaber_Builder_Game.Presentation
                 OnPropertyChanged(nameof(CurrentNPC));
             }
         }
+        public GameItemModelQuantity CurrentGameItemWeapon
+        {
+            get { return _currentGameItemWeapon; }
+            set 
+            {
+                _currentGameItemWeapon = value;
+                OnPropertyChanged(nameof(CurrentGameItemWeapon));
+                if (_currentGameItemWeapon.GameItemModel is Weapons)
+                {
+                    _player.CurrentGameItemWeapon = _currentGameItem.GameItemModel as Weapons;
+                }
+            }
+        }
+
 
         #endregion
 
@@ -171,22 +186,29 @@ namespace Lightsaber_Builder_Game.Presentation
         {
             if (_currentGameItem != null && _currentLocation.GameItems.Contains(_currentGameItem))
             {
-                GameItemModelQuantity selectedGameItemModelQuantity = _currentGameItem as GameItemModelQuantity;
-
-                switch (_currentGameItem.GameItemModel)
+                if (!(CurrentLocation.NPCs is IBattle))
                 {
-                    case LightSaberParts lightSaber:
-                        AddLightsaberProgress(lightSaber, selectedGameItemModelQuantity);
-                        _player.UpdateMissionStatus();
-                        break;
-                    case KyberCrystals kybercrystal:
-                        AddLightsaberCrystalProgress(kybercrystal, selectedGameItemModelQuantity);
-                        _player.UpdateMissionStatus();
-                        break;
-                    default:
-                        _currentLocation.RemoveGameItemModelFromLocation(selectedGameItemModelQuantity);
-                        _player.AddGameItemModelToInventory(selectedGameItemModelQuantity);
-                        break;
+                    GameItemModelQuantity selectedGameItemModelQuantity = _currentGameItem as GameItemModelQuantity;
+
+                    switch (_currentGameItem.GameItemModel)
+                    {
+                        case LightSaberParts lightSaber:
+                            AddLightsaberProgress(lightSaber, selectedGameItemModelQuantity);
+                            _player.UpdateMissionStatus();
+                            break;
+                        case KyberCrystals kybercrystal:
+                            AddLightsaberCrystalProgress(kybercrystal, selectedGameItemModelQuantity);
+                            _player.UpdateMissionStatus();
+                            break;
+                        default:
+                            _currentLocation.RemoveGameItemModelFromLocation(selectedGameItemModelQuantity);
+                            _player.AddGameItemModelToInventory(selectedGameItemModelQuantity);
+                            break;
+                    }
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Error: You must defeat the enemy first");
                 }
             }
         }
@@ -321,7 +343,7 @@ namespace Lightsaber_Builder_Game.Presentation
 
         private void WeaponsUse(Weapons weapons)
         {
-            _player.WeaponsInUse = weapons.Using;
+            _player.CurrentGameItemWeapon = _currentGameItem.GameItemModel as Weapons;
             _player.RemoveGameItemModelToInventory(_currentGameItem);
         }
         #endregion
@@ -347,38 +369,8 @@ namespace Lightsaber_Builder_Game.Presentation
 
         #endregion
 
-        public void OnPlayerTalk() 
-        {
-            if (CurrentNPC != null && CurrentNPC is ISpeak)
-            {
-                ISpeak speakingNPC = CurrentNPC as ISpeak;
-                CurrentLocationInformation = speakingNPC.Speak();
-                _player.UpdateMissionStatus();
-                _player.NPCSDefeated.Add(_currentNPC);
-                if (CurrentNPC.Name == "Emperor Palpatine")
-                {
-                    if (MessageBox.Show("Do you want to accept the quests?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        
-                    }
-                    else
-                    {
-                        // Do Nothing
-                    }
-                }
-                else if (CurrentNPC.Name == "Obi-Wan Kenobi")
-                {
-                    if (MessageBox.Show("Do you want to accept the quests?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        
-                    }
-                    else
-                    {
-                        // Do Nothing
-                    }
-                }
-            }
-        }
+        #region Missions
+
         private string GenerateMissionDefeatDetail(MissionBattleEnemys mission) 
         {
             StringBuilder sb = new StringBuilder();
@@ -463,30 +455,160 @@ namespace Lightsaber_Builder_Game.Presentation
             missionStatusViewModel.MissionInformation = GenerateMissionStatusInfo();
 
             missionStatusViewModel.Missions = new List<Mission>(_player.Mission);
-            foreach (Mission mission in missionStatusViewModel.Missions)
-            {
-                if (mission is MissionBattleEnemys)
-                    mission.StatusDetail = GenerateMissionDefeatDetail((MissionBattleEnemys)mission);
+                foreach (Mission mission in missionStatusViewModel.Missions)
+                {
+                    if (mission is MissionBattleEnemys)
+                        mission.StatusDetail = GenerateMissionDefeatDetail((MissionBattleEnemys)mission);
 
-                if (mission is MissionLightsaberParts)
-                    mission.StatusDetail = GenerateMissionLightsaberDetail((MissionLightsaberParts)mission);
-            }
+                    if (mission is MissionLightsaberParts)
+                        mission.StatusDetail = GenerateMissionLightsaberDetail((MissionLightsaberParts)mission);
+                }
 
             return missionStatusViewModel;
         }
-        public void OpenMissionBattleView() 
-        {
-            if (_currentNPC.Id == 106 || _currentNPC.Id == 108 || _currentNPC.Id == 101 || _currentNPC.Id == 109)
-            {
-                MissionBattleView missionBattleView = new MissionBattleView(InitializeMissionBattleViewModel());
 
-                missionBattleView.Show();
+
+        #endregion
+
+        #region Battle
+
+        public void OnPlayerAttack()
+        {
+            _player.BattleEnumName = BattleEnum.ATTACK;
+            Battle();
+            if (_currentNPC != null)
+                _player.NPCSDefeated.Add(_currentNPC);
+            _player.UpdateMissionStatus();
+        }
+        private BattleEnum NPCBattleResponse()
+        {
+            BattleEnum npcBattleResponse = BattleEnum.ATTACK;
+
+            return npcBattleResponse;
+        }
+        private int CalculatePlayerHitPoints()
+        {
+            int playerHitPoints = 0;
+            switch (_player.BattleEnumName)
+            {
+                case BattleEnum.ATTACK:
+                    playerHitPoints = _player.Attack();
+                    break;
+                case BattleEnum.RETREAT:
+                    playerHitPoints = _player.Retreat();
+                    break;
+            }
+            return playerHitPoints;
+        }
+        private int CalculateNPCHitPoints(IBattle battleNpc)
+        {
+            int npcHitPoints = 0;
+            switch (NPCBattleResponse())
+            {
+                case BattleEnum.ATTACK:
+                    npcHitPoints = battleNpc.Attack();
+                    break;
+            }
+            return npcHitPoints;
+        }
+        private void Battle()
+        {
+            //
+            // check to see if an NPC can battle
+            //
+            if (_currentNPC is IBattle)
+            {
+                IBattle battleNpc = _currentNPC as IBattle;
+                int playerHitPoints = 0;
+                int battleNpcHitPoints = 0;
+                string battleInformation = "";
+
+                //
+                // calculate hit points if the player and NPC have weapons
+                //
+                if (_player.CurrentGameItemWeapon != null)
+                {
+                    playerHitPoints = CalculatePlayerHitPoints();
+                    _currentNPC.Health = _currentNPC.Health - playerHitPoints;
+                }
+                else
+                {
+                    battleInformation = "ALERT: You are entering into battle without a weapon." + Environment.NewLine;
+                }
+
+                if (battleNpc.CurrentGameItemWeapon != null)
+                {
+                    battleNpcHitPoints = CalculateNPCHitPoints(battleNpc);
+                    _player.Health = _player.Health - battleNpcHitPoints;
+                }
+                else
+                {
+
+                }
+                battleInformation +=
+                    $"Player: {_player.BattleMode}     Hit Points: {playerHitPoints}" + Environment.NewLine +
+                    $"NPC: {battleNpc.BattleMode}     Hit Points: {battleNpcHitPoints}" + Environment.NewLine;
+
+                if (playerHitPoints >= battleNpcHitPoints)
+                {
+                    battleInformation += $"You have slain {_currentNPC.Name}.";
+                    _currentLocation.NPCs.Remove(_currentNPC);
+                }
+                else
+                {
+                    battleInformation += $"You have been slain by {_currentNPC.Name}.";
+                    _player.Lives--;
+                }
+
+                CurrentLocationInformation = battleInformation;
+                if (_player.Lives <= 0) OnPlayerDies();
             }
             else
             {
-                MessageBoxResult result = MessageBox.Show("Error: You Cannot Battle This NPC");
+                CurrentLocationInformation = "You can not battle this NPC";
             }
         }
+        private void OnPlayerDies()
+        {
+            MessageBoxResult result = MessageBox.Show("Thank you for playing my game");
+            Environment.Exit(0);
+        }
+
+        #endregion
+
+        public void OnPlayerTalk() 
+        {
+            if (CurrentNPC != null && CurrentNPC is ISpeak)
+            {
+                ISpeak speakingNPC = CurrentNPC as ISpeak;
+                CurrentLocationInformation = speakingNPC.Speak();
+                _player.UpdateMissionStatus();
+                _player.NPCSDefeated.Add(_currentNPC);
+                if (CurrentNPC.Name == "Emperor Palpatine")
+                {
+                    if (MessageBox.Show("Do you want to accept the quests?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        
+                    }
+                    else
+                    {
+                        // Do Nothing
+                    }
+                }
+                else if (CurrentNPC.Name == "Obi-Wan Kenobi")
+                {
+                    if (MessageBox.Show("Do you want to accept the quests?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        
+                    }
+                    else
+                    {
+                        // Do Nothing
+                    }
+                }
+            }
+        }
+
 
         #endregion
 
