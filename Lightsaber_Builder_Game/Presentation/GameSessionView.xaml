@@ -229,6 +229,11 @@
                             Content="Pick Up"
                             Style="{StaticResource ButtonGameSessionStyle}"
                             Click="PickUpButton_Click"/>
+                        <Button
+                            Content="Build Lightsaber"
+                            Margin="50,0,0,0"
+                            Style="{StaticResource ButtonGameSessionStyle}"
+                            Click="BuildLightsaber_Click"/>
                     </StackPanel>
 
                 </StackPanel>
@@ -301,38 +306,8 @@
                                     Margin="0,10,0,0"
                                     Style="{StaticResource ButtonGameSessionStyle}"
                                     Click="BattleQuestButton_Click"/>
-                                <Button
-                                    Content="Accept Quest"
-                                    Margin="50,10,0,0"
-                                    Style="{StaticResource ButtonGameSessionStyle}"
-                                    Click="AcceptQuestButton_Click"/>
                             </StackPanel>
                         </StackPanel>
-                    </TabItem>
-                    <TabItem
-                        Header="Quest Log"
-                        Width="150"
-                        Height="40"
-                        FontSize="20">
-                        <StackPanel>
-                            <TextBox
-                                Name="CurrentQuestTextBox"
-                                Height="175"
-                                Width="auto"
-                                Margin="10"
-                                Background="Gray"
-                                BorderThickness="0"
-                                TextWrapping="Wrap"
-                                Text="{Binding MissionInformation, Mode=OneWay}"
-                                VerticalScrollBarVisibility="Auto"
-                                VerticalContentAlignment="top"/>
-                            <Button
-                                Content="Enter Lair"
-                                Margin="0,0,0,0"
-                                Style="{StaticResource ButtonGameSessionStyle}"
-                                Click="EnterLair_Click"/>
-                        </StackPanel>
-
                     </TabItem>
                     <TabItem
                         Header="Quests"
@@ -512,7 +487,7 @@
                             Width="150"
                             FontSize="25"
                             IsReadOnly="True"
-                            Text="{Binding Player.CurrentGameItemWeapon}"/>
+                            Text="{Binding Player.CurrentGameItemWeapon.Name}"/>
                     </StackPanel>
                     <StackPanel
                         Orientation="Horizontal"

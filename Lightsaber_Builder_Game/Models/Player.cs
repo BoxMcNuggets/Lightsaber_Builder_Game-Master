@@ -12,7 +12,7 @@ namespace Lightsaber_Builder_Game.Models
     {
         #region ENUMS
 
-        public enum ForceSide { LightSide, DarkSide }
+        public enum ForceSide { LightSide = 0, DarkSide = 1}
 
         private const int DEFENDER_DAMAGE_ADJUSTMENT = 5;
         private const int MAXIMUM_RETREAT_DAMAGE = 10;
@@ -23,14 +23,13 @@ namespace Lightsaber_Builder_Game.Models
 
         private int _lightsaberProgress;
         private int _lives;
-        private int _health;
         private Weapons _currentGameItemWeapon;
         private BattleEnum _battleEnum;
         private string _weaponsInUse;
         private ForceSide _forceSide;
         private List<Location> _locationsVisited;
         private List<NPCS> _npcsDefeated;
-        private ObservableCollection<GameItemModelQuantity> _inventory;
+        private ObservableCollection<GameItemModelQuantity> _inventory = new ObservableCollection<GameItemModelQuantity>();
         private ObservableCollection<GameItemModelQuantity> _healthItems;
         private ObservableCollection<GameItemModelQuantity> _credits;
         private ObservableCollection<GameItemModelQuantity> _weapons;
@@ -79,29 +78,14 @@ namespace Lightsaber_Builder_Game.Models
                 OnPropertyChanged(nameof(JobTitle));
             }
         }
-        public int Health
-        {
-            get { return _health; }
-            set 
-            {
-                _health = value;
-
-                if (_health > 100)
-                {
-                    _health = 100;
-                }
-                else if (_health <= 0)
-                {
-                    _health = 100;
-                    _lives--;
-                }
-                OnPropertyChanged(nameof(Health));
-            }
-        }
         public Weapons CurrentGameItemWeapon
         {
             get { return _currentGameItemWeapon; }
-            set { _currentGameItemWeapon = value; }
+            set 
+            {
+                _currentGameItemWeapon = value;
+                OnPropertyChanged(nameof(CurrentGameItemWeapon));
+            }
         }
         public BattleEnum BattleEnumName
         {

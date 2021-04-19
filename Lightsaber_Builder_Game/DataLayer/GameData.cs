@@ -11,18 +11,6 @@ namespace Lightsaber_Builder_Game.DataLayer
 {
     public static class GameData
     {
-        public static Player.ForceSide PlayerJobTitle()
-        {
-            if (true)
-            {
-                return Player.ForceSide.DarkSide;
-            }
-            else
-            {
-                return Player.ForceSide.LightSide;
-            }
-        }
-
         public static Player PlayerData()
         {
             return new Player()
@@ -36,12 +24,12 @@ namespace Lightsaber_Builder_Game.DataLayer
                 Lives = 2,
                 Inventory = new ObservableCollection<GameItemModelQuantity>()
                 {
-
+                    new GameItemModelQuantity(GameItemModelById(40), 1),
+                    new GameItemModelQuantity(GameItemModelById(12), 1)
                 },
                 Mission = new ObservableCollection<Mission>()
                 {
-                    MissionById(1),
-                    MissionById(2)
+
                 },
                 CurrentGameItemWeapon = GameItemModelById(44) as Weapons
                 
@@ -49,35 +37,58 @@ namespace Lightsaber_Builder_Game.DataLayer
         }
         #region Create GameMap
 
-        public static Map GameMap()
+        public static Map GameMap(Player.ForceSide force)
         {
             Map gamemap = new Map();
-
-            gamemap.Locations.Add
-            (new Location()
+            switch (force)
             {
-                ID = 1,
-                Name = "Ship",
-                PlanetColor = "gray",
-                Description = "Your ship is a Tie-Fighter" +
-                    "It is a weaponless, workmanlike Cruiser",
-                Accessible = true,
-                Message = "Welcome to your ship, From your ship you can travel to other places. Dont forget " +
-                    "to grab your Blaster",
-                PlanetLog = "",
-                GameItems = new ObservableCollection<GameItemModelQuantity>
-                {
-                    new GameItemModelQuantity(GameItemModelById(40), 1),
-                    new GameItemModelQuantity(GameItemModelById(10), 1),
-                    new GameItemModelQuantity(GameItemModelById(11), 1),
-                    new GameItemModelQuantity(GameItemModelById(12), 1)
-                }
+                case Player.ForceSide.LightSide:
+                    gamemap.Locations.Add
+                        (new Location()
+                        {
+                            ID = 1,
+                            Name = "Ship",
+                            PlanetColor = "/Lightsaber_Builder_Game;component/Graphics/X-Wing.jpg",
+                            Description = "Your ship is a X-Wing. " +
+                                "It is a well known fighter ship of the Republic",
+                            Accessible = true,
+                            Message = "Welcome to your ship, From your ship you can travel to other places.",
+                            PlanetLog = "",
+                            GameItems = new ObservableCollection<GameItemModelQuantity>
+                            {
+                                new GameItemModelQuantity(GameItemModelById(10), 1),
+                                new GameItemModelQuantity(GameItemModelById(11), 1)
+                            }
+                        }
+                        );
+                    break;
+                case Player.ForceSide.DarkSide:
+                    gamemap.Locations.Add
+                        (new Location()
+                        {
+                            ID = 1,
+                            Name = "Ship",
+                            PlanetColor = "/Lightsaber_Builder_Game;component/Graphics/tie-fighter.jpg",
+                            Description = "Your ship is a Tie-Fighter. " +
+                                "It is a well know fighter ship of the Empire",
+                            Accessible = true,
+                            Message = "Welcome to your ship, From your ship you can travel to other places.",
+                            PlanetLog = "",
+                            GameItems = new ObservableCollection<GameItemModelQuantity>
+                            {
+                                new GameItemModelQuantity(GameItemModelById(10), 1),
+                                new GameItemModelQuantity(GameItemModelById(11), 1)
+                            }
+                        }
+                        );
+                    break;
+                default:
+                    break;
             }
-            );
 
             gamemap.Currentlocation = gamemap.Locations.FirstOrDefault(l => l.ID == 1);
 
-            switch (PlayerJobTitle())
+            switch (force)
             {
                 case Player.ForceSide.LightSide:
                     gamemap.Locations.Add
@@ -268,7 +279,7 @@ namespace Lightsaber_Builder_Game.DataLayer
                 new LightSaberParts(33, "LIGHTSABER: Hand Grip", 1, LightSaberParts.LightsaberPart.HandGrip, "The lower part of the lightsaber that you hold on to", 17),
                 new LightSaberParts(34, "LIGHTSABER: Energy Core", 1, LightSaberParts.LightsaberPart.EnergyCore, "Part of a lightsaber that harnesses the energy and creates the lazer sword part", 17),
                 new Weapons(40, "Blaster", 1, 15, 75, "A blaster where if used correctly, can be deadly", "Blaster"),
-                new Weapons(41, "Lightsaber", 10, 75, 200, "The lightsaber is a great weapon that can cut through most things in the universe", "Lightsaber"),
+                new Weapons(41, "Lightsaber", 10, 50, 100, "The lightsaber is a great weapon that can cut through most things in the universe", "Lightsaber"),
                 new Weapons(42, "Tazer", 1, 10, 20, "A metal rod that a droid can use to defend itself", "Tazer"),
                 new Weapons(43, "Claws", 1, 25, 75, "The claws of a wampa which are very pointy and sharp", "Claws"),
                 new Weapons(44, "Fists", 1, 0, 5, "Your hands", "Fists"),

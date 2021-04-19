@@ -11,7 +11,7 @@ namespace Lightsaber_Builder_Game.Business
 {
     public class GameBusiness
     {
-        bool _newPlayer = false;
+        bool _newPlayer = true;
 
         GameSessionViewModel _gameSessionViewModel;
         Player _player = new Player();
@@ -28,6 +28,7 @@ namespace Lightsaber_Builder_Game.Business
         {
             if (_newPlayer)
             {
+                _player = GameData.PlayerData();
                 _playerSetupView = new GameSetupView(_player);
                 _playerSetupView.ShowDialog();
 
@@ -41,7 +42,7 @@ namespace Lightsaber_Builder_Game.Business
         }
         private void InitializeDataSet()
         {
-            _gamemap = GameData.GameMap();
+            _gamemap = GameData.GameMap(_player.JobTitle);
         }
         private void InstantiateAndShowView()
         {

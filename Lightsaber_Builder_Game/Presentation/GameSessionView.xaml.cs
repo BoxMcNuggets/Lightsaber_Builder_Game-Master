@@ -65,14 +65,6 @@ namespace Lightsaber_Builder_Game.Presentation
                 _gameSessionViewModel.OnPlayerTalk();
             }
         }
-        private void AcceptQuestButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void EnterLair_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Environment.Exit(0);
@@ -80,6 +72,10 @@ namespace Lightsaber_Builder_Game.Presentation
         private void BattleQuestButton_Click(object sender, RoutedEventArgs e)
         {
             _gameSessionViewModel.OnPlayerAttack();
+        }
+        private void BuildLightsaber_Click(object sender, RoutedEventArgs e)
+        {
+            _gameSessionViewModel.BuildLightsaber();
         }
 
         #endregion

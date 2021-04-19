@@ -48,7 +48,7 @@ namespace Lightsaber_Builder_Game.Models
                 {
                     if (inventoryItemMatch.Quantity < missionGameItem.Quantity)
                     {
-                        gameItemModelQuantityComplete.Add(missionGameItem);
+                        gameItemModelQuantityComplete.Remove(missionGameItem);
                     }
                 }
             }

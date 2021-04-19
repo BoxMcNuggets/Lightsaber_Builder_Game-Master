@@ -37,6 +37,7 @@ namespace Lightsaber_Builder_Game.Presentation
         private ObservableCollection<Location> _accessibleLocations;
         private string _currentLocationName;
         private GameItemModelQuantity _currentGameItem;
+        private GameItemModelQuantity _currentKyberCrystal;
         private string _currentLocationInformation;
         private NPCS _currentNPC;
         private GameItemModelQuantity _currentGameItemWeapon;
@@ -123,6 +124,12 @@ namespace Lightsaber_Builder_Game.Presentation
                 OnPropertyChanged(nameof(CurrentGameItem));
             }
         }
+        public GameItemModelQuantity CurrentKyberCrystal
+        {
+            get { return _currentKyberCrystal; }
+            set { _currentKyberCrystal = value; }
+        }
+
         public NPCS CurrentNPC
         {
             get { return _currentNPC; }
@@ -186,29 +193,23 @@ namespace Lightsaber_Builder_Game.Presentation
         {
             if (_currentGameItem != null && _currentLocation.GameItems.Contains(_currentGameItem))
             {
-                if (!(CurrentLocation.NPCs is IBattle))
-                {
-                    GameItemModelQuantity selectedGameItemModelQuantity = _currentGameItem as GameItemModelQuantity;
+                GameItemModelQuantity selectedGameItemModelQuantity = _currentGameItem as GameItemModelQuantity;
 
-                    switch (_currentGameItem.GameItemModel)
-                    {
-                        case LightSaberParts lightSaber:
-                            AddLightsaberProgress(lightSaber, selectedGameItemModelQuantity);
-                            _player.UpdateMissionStatus();
-                            break;
-                        case KyberCrystals kybercrystal:
-                            AddLightsaberCrystalProgress(kybercrystal, selectedGameItemModelQuantity);
-                            _player.UpdateMissionStatus();
-                            break;
-                        default:
-                            _currentLocation.RemoveGameItemModelFromLocation(selectedGameItemModelQuantity);
-                            _player.AddGameItemModelToInventory(selectedGameItemModelQuantity);
-                            break;
-                    }
-                }
-                else
+                switch (_currentGameItem.GameItemModel)
                 {
-                    MessageBoxResult result = MessageBox.Show("Error: You must defeat the enemy first");
+                    case LightSaberParts lightSaber:
+                        AddLightsaberProgress(lightSaber, selectedGameItemModelQuantity);
+                        _player.UpdateMissionStatus();
+                        break;
+                    case KyberCrystals kybercrystal:
+                        AddLightsaberCrystalProgress(kybercrystal, selectedGameItemModelQuantity);
+                        _player.UpdateMissionStatus();
+                        _currentGameItem = _currentKyberCrystal;
+                        break;
+                    default:
+                        _currentLocation.RemoveGameItemModelFromLocation(selectedGameItemModelQuantity);
+                        _player.AddGameItemModelToInventory(selectedGameItemModelQuantity);
+                        break;
                 }
             }
         }
@@ -216,6 +217,7 @@ namespace Lightsaber_Builder_Game.Presentation
         {
             if (_player.LightsaberProgress == 85)
             {
+                _currentKyberCrystal = _currentGameItem;
                 _player.LightsaberProgress += kybercrystal.LightsaberProgress;
                 _currentLocation.RemoveGameItemModelFromLocation(selectedGameItemModelQuantity);
                 _player.AddGameItemModelToInventory(selectedGameItemModelQuantity);
@@ -556,8 +558,17 @@ namespace Lightsaber_Builder_Game.Presentation
                 }
                 else
                 {
-                    battleInformation += $"You have been slain by {_currentNPC.Name}.";
-                    _player.Lives--;
+                    
+                    if (_player.Health <= 0)
+                    {
+                        battleInformation += $"You have been slain by {_currentNPC.Name}.";
+                        _player.Lives--;
+                        _player.Health = 100;
+                    }
+                    else
+                    {
+                        battleInformation += $"{_currentNPC.Name} has won that round.";
+                    }
                 }
 
                 CurrentLocationInformation = battleInformation;
@@ -583,7 +594,9 @@ namespace Lightsaber_Builder_Game.Presentation
                 ISpeak speakingNPC = CurrentNPC as ISpeak;
                 CurrentLocationInformation = speakingNPC.Speak();
                 _player.UpdateMissionStatus();
-                _player.NPCSDefeated.Add(_currentNPC);
+                _player.NPCSDefeated.Remove(_currentNPC);
+
+
                 if (CurrentNPC.Name == "Emperor Palpatine")
                 {
                     if (MessageBox.Show("Do you want to accept the quests?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
@@ -609,6 +622,18 @@ namespace Lightsaber_Builder_Game.Presentation
             }
         }
 
+        public void BuildLightsaber() 
+        {
+            _player.CurrentGameItemWeapon = _currentGameItem.GameItemModel as Weapons;
+            if (_player.LightsaberProgress == 100)
+            {
+                MessageBoxResult result = MessageBox.Show("Congrats on building  your lightsaber");
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show("Error: You must collect all the lightsaber parts first");
+            }
+        }
 
         #endregion
 
