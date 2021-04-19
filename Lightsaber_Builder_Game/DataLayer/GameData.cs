@@ -29,7 +29,8 @@ namespace Lightsaber_Builder_Game.DataLayer
                 },
                 Mission = new ObservableCollection<Mission>()
                 {
-
+                    MissionById(1),
+                    MissionById(2)
                 },
                 CurrentGameItemWeapon = GameItemModelById(44) as Weapons
                 

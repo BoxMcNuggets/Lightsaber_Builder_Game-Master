@@ -596,29 +596,31 @@ namespace Lightsaber_Builder_Game.Presentation
                 _player.UpdateMissionStatus();
                 _player.NPCSDefeated.Remove(_currentNPC);
 
+                //
+                // Ask If they want to accept the quest, then add quest if yes
+                //
+                //if (CurrentNPC.Name == "Emperor Palpatine")
+                //{
+                //    if (MessageBox.Show("Do you want to accept the quests?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                //    {
 
-                if (CurrentNPC.Name == "Emperor Palpatine")
-                {
-                    if (MessageBox.Show("Do you want to accept the quests?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        
-                    }
-                    else
-                    {
-                        // Do Nothing
-                    }
-                }
-                else if (CurrentNPC.Name == "Obi-Wan Kenobi")
-                {
-                    if (MessageBox.Show("Do you want to accept the quests?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        
-                    }
-                    else
-                    {
-                        // Do Nothing
-                    }
-                }
+                //    }
+                //    else
+                //    {
+                //        // Do Nothing
+                //    }
+                //}
+                //else if (CurrentNPC.Name == "Obi-Wan Kenobi")
+                //{
+                //    if (MessageBox.Show("Do you want to accept the quests?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                //    {
+
+                //    }
+                //    else
+                //    {
+                //        // Do Nothing
+                //    }
+                //}
             }
         }
 
